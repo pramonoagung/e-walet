@@ -7,6 +7,8 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
@@ -15,6 +17,7 @@ import java.util.Date;
 @Data
 public class User {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(length = 25)
@@ -23,16 +26,16 @@ public class User {
     @JsonIgnore
     private String password;
     @Column(length = 25)
-    private String firstName;
+    private String first_name;
     @Column(length = 25)
-    private String lastName;
+    private String last_name;
     @Column(length = 25)
-    private String phoneNumber;
+    private String phone_number;
     @Column(length = 100)
     private String token;
     @Column()
     private int status;
-    @Column
-    @CreationTimestamp
-    private Date createdAt;
+//    @Column
+//    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime created_at = LocalDateTime.now();
 }

@@ -20,7 +20,7 @@ public interface UserMapper {
 
     final String findByEmail = "SELECT * FROM USER WHERE EMAIL = #{email}";
     final String save = "INSERT INTO USER (EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER, TOKEN, STATUS, CREATED_AT ) " +
-            "VALUES (#{email}, #{password}, #{firstName}, #{lastName}, #{phoneNumber}, #{token}, #{status}, #{createdAt})";
+            "VALUES (#{email}, #{password}, #{first_name}, #{last_name}, #{phone_number}, #{token}, #{status}, #{created_at})";
     final String updateToken = "UPDATE USER SET TOKEN = #{token} WHERE ID = #{id}";
 
     @Select(findByEmail)
@@ -28,12 +28,12 @@ public interface UserMapper {
             @Result(property = "id", column = "ID"),
             @Result(property = "email", column = "EMAIL"),
             @Result(property = "password", column = "PASSWORD"),
-            @Result(property = "firstName", column = "FIRST_NAME"),
-            @Result(property = "lastName", column = "LAST_NAME"),
-            @Result(property = "phoneNumber", column = "PHONE_NUMBER"),
+            @Result(property = "first_name", column = "FIRST_NAME"),
+            @Result(property = "last_name", column = "LAST_NAME"),
+            @Result(property = "phone_number", column = "PHONE_NUMBER"),
             @Result(property = "token", column = "TOKEN"),
             @Result(property = "status", column = "STATUS"),
-            @Result(property = "createdAt", column = "CREATED_AT")
+            @Result(property = "created_at", column = "CREATED_AT")
     })
     User findByEmail(String email);
 

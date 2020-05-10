@@ -43,10 +43,12 @@ public class JwtUserDetailsService implements UserDetailsService {
 		User newUser = new User();
 		newUser.setEmail(user.getEmail());
 		newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-		newUser.setFirstName(user.getFirst_name());
-		newUser.setLastName(user.getLast_name());
-		newUser.setPhoneNumber(user.getPhone_number());
+		newUser.setFirst_name(user.getFirst_name());
+		newUser.setLast_name(user.getLast_name());
+		newUser.setPhone_number(user.getPhone_number());
 		userMapper.save(newUser);
-		return userMapper.findByEmail(newUser.getEmail());
+		User returnCreatedUser = userMapper.findByEmail(newUser.getEmail());
+		System.out.println("RETURN"+returnCreatedUser);
+		return returnCreatedUser;
 	}
 }
