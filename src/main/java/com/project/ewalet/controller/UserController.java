@@ -14,6 +14,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.ValidationException;
+
 @RestController
 @CrossOrigin
 public class UserController {
@@ -42,7 +45,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
+	public ResponseEntity<?> saveUser(@Valid @RequestBody UserDTO user) throws ValidationException {
 		System.out.println(user);
 		return ResponseEntity.ok(userDetailsService.save(user));
 	}
