@@ -40,7 +40,7 @@ public interface UserMapper {
 
     @Insert(save)
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    User save(User user);
+    void save(User user);
 
     @Update(updateToken)
     void updateToken(String token, long id);
