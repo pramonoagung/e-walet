@@ -20,13 +20,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -125,6 +124,12 @@ public class UserController {
         //TODO logout
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
 
+    }
+
+    @GetMapping(value = "/get-user-profile")
+    public ResponseEntity getUserProfile(Authentication authentication, Principal principal) {
+        User userProfile = userMapper.findByEmail(authentication.getName());
+        return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
 
     @PostMapping(value = "/verify-otp")
