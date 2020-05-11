@@ -53,20 +53,12 @@ public class UserController {
     @PostMapping(value = "/sign-up")
     public ResponseEntity<?> saveUser(@Valid @RequestBody UserDTO user) throws ValidationException {
         JSONObject jsonObject = new JSONObject();
-        System.out.println(user);
-        //TODO user input validation and respose
-        String CustomValidationResponse = "failed";
+        //TODO user input validation and response
 
-        User savedUser = userDetailsService.save(user);
-        if (savedUser != null) {
-            jsonObject.put("status", 200);
-            jsonObject.put("message", "created");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-        } else {
-            jsonObject.put("status", 400);
-            jsonObject.put("message", CustomValidationResponse);
-            return new ResponseEntity<>(jsonObject, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        userDetailsService.save(user);
+        jsonObject.put("status", 200);
+        jsonObject.put("message", "created");
+        return new ResponseEntity<>(jsonObject, HttpStatus.OK);
     }
 
     private void authenticate(String username, String password) throws Exception {
