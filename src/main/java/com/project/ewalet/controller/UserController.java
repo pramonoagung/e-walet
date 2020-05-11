@@ -119,6 +119,14 @@ public class UserController {
         }
     }
 
+    @PostMapping(value = "/logout")
+    public ResponseEntity<?> logout(@RequestBody OtpRequest otpRequest) {
+        JSONObject jsonObject = new JSONObject();
+        //TODO logout
+        return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+
+    }
+
     @PostMapping(value = "/verify-otp")
     public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otpRequest) {
         JSONObject jsonObject = new JSONObject();
