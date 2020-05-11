@@ -2,9 +2,12 @@ package com.project.ewalet.controller;
 
 import com.project.ewalet.config.auth.JwtTokenUtil;
 import com.project.ewalet.mapper.OtpMapper;
-import com.project.ewalet.model.*;
+import com.project.ewalet.mapper.UserMapper;
+import com.project.ewalet.model.JwtRequest;
+import com.project.ewalet.model.Otp;
+import com.project.ewalet.model.User;
+import com.project.ewalet.model.UserDTO;
 import com.project.ewalet.service.AsyncService;
-import com.project.ewalet.service.EmailService;
 import com.project.ewalet.service.JwtUserDetailsService;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
@@ -30,7 +33,6 @@ import javax.validation.Valid;
 import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-import javax.validation.ValidationException;
 
 @Configuration
 @RestController
@@ -45,6 +47,8 @@ public class UserController {
     private JwtUserDetailsService userDetailsService;
     @Autowired
     private OtpMapper otpMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Value("${twilio.account.sid}")
     private String accountSid;
@@ -55,16 +59,28 @@ public class UserController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-
+        JSONObject jsonObject = new JSONObject();
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getEmail());
+        User user = userMapper.findByEmail(authenticationRequest.getEmail());
+        if (user.getStatus() == 0) {
+            jsonObject.put("status", 401);
+            jsonObject.put("message", "Please activate you account");
+            return new ResponseEntity<>(jsonObject, HttpStatus.UNAUTHORIZED);
+        } else {
+            String token = jwtTokenUtil.generateToken(userDetails);
+            JSONObject data = new JSONObject();
+            data.put("token", token);
+            data.put("message", "loged in");
+            data.put("user_id", user.getId());
+            jsonObject.put("status", 200);
+            jsonObject.put("data", data);
+            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+        }
 
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        // userDetailsService.updateToken(token, authenticationRequest.getEmail());
 
-       // userDetailsService.updateToken(token, authenticationRequest.getEmail());
-
-        return ResponseEntity.ok(new JwtResponse(token));
     }
 
     @PostMapping(value = "/sign-up")
