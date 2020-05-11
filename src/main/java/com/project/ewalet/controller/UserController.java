@@ -30,6 +30,7 @@ import javax.validation.Valid;
 import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+import javax.validation.ValidationException;
 
 @Configuration
 @RestController
@@ -61,7 +62,7 @@ public class UserController {
 
         final String token = jwtTokenUtil.generateToken(userDetails);
 
-        userDetailsService.updateToken(token, authenticationRequest.getEmail());
+       // userDetailsService.updateToken(token, authenticationRequest.getEmail());
 
         return ResponseEntity.ok(new JwtResponse(token));
     }
@@ -135,4 +136,5 @@ public class UserController {
     void sendEmail(String toEmail, String code) {
         CompletableFuture<JSONObject> sendEmail = service.sendEmail(toEmail, code);
     }
+
 }

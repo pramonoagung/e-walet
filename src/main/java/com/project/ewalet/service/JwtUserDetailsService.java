@@ -34,10 +34,10 @@ public class JwtUserDetailsService implements UserDetailsService {
 				new ArrayList<>());
 	}
 
-	public void updateToken(String token, String email) {
-		User user = userMapper.findByEmail(email);
-		userMapper.updateToken(token, user.getId());
-	}
+//	public void updateToken(String token, String email) {
+//		User user = userMapper.findByEmail(email);
+//		userMapper.updateToken(token, user.getId());
+//	}
 	
 	public User save(UserDTO user) {
 		User newUser = new User();

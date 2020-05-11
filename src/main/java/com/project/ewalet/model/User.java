@@ -4,16 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @Entity
-@Table(name = "user")
+@Table(name = "user", indexes = @Index(columnList = "id"))
 @Data
 public class User {
 
@@ -31,8 +28,8 @@ public class User {
     private String last_name;
     @Column(length = 25)
     private String phone_number;
-    @Column(length = 255)
-    private String token;
+//    @Column(length = 255)
+//    private String token;
     @Column()
     private int status;
 //    @Column
