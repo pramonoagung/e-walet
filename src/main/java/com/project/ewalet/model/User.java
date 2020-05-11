@@ -31,7 +31,7 @@ public class User {
     private String last_name;
     @Column(length = 25)
     private String phone_number;
-    @Column(length = 100)
+    @Column(length = 255)
     private String token;
     @Column()
     private int status;
