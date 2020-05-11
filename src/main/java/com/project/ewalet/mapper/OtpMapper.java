@@ -7,9 +7,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface OtpMapper {
-    final String findByCode = "SELECT * FROM USER WHERE EMAIL = #{email}";
+    final String findByCode = "SELECT * FROM otp WHERE code = #{code}";
     final String insert = "INSERT INTO otp (id, user_id, code, STATUS, CREATED_AT ) " +
             "VALUES (#{id}, #{user_id}, #{code}, #{status}, #{created_at})";
+    final String update = "UPDATE otp SET status = #{status} WHERE user_ID = #{user_id}";
 
     @Select(findByCode)
     @Results(value = {
@@ -24,4 +25,7 @@ public interface OtpMapper {
     @Insert(insert)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void save(Otp otp);
+
+    @Update(update)
+    void update(Otp otp);
 }

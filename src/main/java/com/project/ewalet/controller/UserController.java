@@ -3,10 +3,7 @@ package com.project.ewalet.controller;
 import com.project.ewalet.config.auth.JwtTokenUtil;
 import com.project.ewalet.mapper.OtpMapper;
 import com.project.ewalet.mapper.UserMapper;
-import com.project.ewalet.model.JwtRequest;
-import com.project.ewalet.model.Otp;
-import com.project.ewalet.model.User;
-import com.project.ewalet.model.UserDTO;
+import com.project.ewalet.model.*;
 import com.project.ewalet.service.AsyncService;
 import com.project.ewalet.service.JwtUserDetailsService;
 import com.twilio.Twilio;
@@ -119,6 +116,26 @@ public class UserController {
             jsonObject.put("status", 400);
             jsonObject.put("message", CustomValidationResponse);
             return new ResponseEntity<>(jsonObject, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+    @PostMapping(value = "/verify-otp")
+    public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otpRequest) {
+        JSONObject jsonObject = new JSONObject();
+        Otp otp = otpMapper.findByCode(otpRequest.getOtp_code());
+        if (!otp.isStatus()) {
+            jsonObject.put("status", 401);
+            jsonObject.put("message", "OTP Code is expired");
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            User user = userMapper.getById(otp.getUser_id());
+            user.setStatus(1);
+            userMapper.update(user);
+            otp.setStatus(false);
+            otpMapper.update(otp);
+            jsonObject.put("status", 200);
+            jsonObject.put("message", "Verified");
+            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
         }
     }
 

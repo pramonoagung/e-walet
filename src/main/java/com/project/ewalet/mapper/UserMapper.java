@@ -15,7 +15,10 @@ public interface UserMapper {
     final String getByName = "SELECT * FROM USER WHERE NAME = #{name}";
     final String deleteById = "DELETE from USER WHERE ID = #{id}";
     final String insert = "INSERT INTO USER (NAME, BRANCH, PERCENTAGE, PHONE, EMAIL ) VALUES (#{name}, #{branch}, #{percentage}, #{phone}, #{email})";
-    final String update = "UPDATE USER SET EMAIL = #{email}, NAME = #{name}, BRANCH = #{branch}, PERCENTAGE = #{percentage}, PHONE = #{phone} WHERE ID = #{id}";
+
+    final String update = "UPDATE USER SET EMAIL = #{email}, password = #{password}, first_NAME = #{first_name}, " +
+            "last_name = #{last_name}, status = #{status}, PHONE_number = #{phone_number} WHERE ID = #{id}";
+
     final String login = "UPDATE USER SET LOGIN_STATUS = TRUE WHERE ID = #{id}";
     final String logout = "UPDATE USER SET LOGIN_STATUS = FALSE WHERE ID = #{id}";
     final String auth = "SELECT * FROM USER WHERE EMAIL = #{email} AND PASSWORD = #{password}";
@@ -39,16 +42,12 @@ public interface UserMapper {
     })
     User findByEmail(String email);
 
-
     @Insert(save)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void save(User user);
 
     @Update(updateToken)
     void updateToken(String token, long id);
-
-
-
 
     @Select(getAll)
     @Results(value = {
@@ -68,7 +67,7 @@ public interface UserMapper {
             @Result(property = "name", column = "NAME"),
             @Result(property = "loginStatus", column = "LOGIN_STATUS")
     })
-    User getById(int id);
+    User getById(long id);
 
     @Select(getByName)
     @Results(value = {
