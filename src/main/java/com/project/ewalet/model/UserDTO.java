@@ -12,6 +12,6 @@ public class UserDTO {
 	private String password;
 	private String first_name;
 	private String last_name;
-	@Pattern(regexp = "(^\\d+$)", message = "Use number only for phone number")
+	@Pattern(regexp = "(\\+62 ((\\d{3}([ -]\\d{3,})([- ]\\d{4,})?)|(\\d+)))|(\\(\\d+\\) \\d+)|\\d{3}( \\d+)+|(\\d+[ -]\\d+)|\\d+", message = "Must inclide country code (62) and length 11 to 12 ")
 	private String phone_number;
 }
