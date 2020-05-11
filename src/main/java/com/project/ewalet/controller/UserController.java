@@ -30,7 +30,7 @@ public class UserController {
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
 
-	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+	@PostMapping(value = "/login")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
 		authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
@@ -44,7 +44,7 @@ public class UserController {
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
 	
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	@PostMapping(value = "/sign-up")
 	public ResponseEntity<?> saveUser(@Valid @RequestBody UserDTO user) throws ValidationException {
 		System.out.println(user);
 		return ResponseEntity.ok(userDetailsService.save(user));
