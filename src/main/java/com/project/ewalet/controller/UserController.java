@@ -45,7 +45,7 @@ public class UserController {
 
         final String token = jwtTokenUtil.generateToken(userDetails);
 
-        userDetailsService.updateToken(token, authenticationRequest.getEmail());
+//        userDetailsService.updateToken(token, authenticationRequest.getEmail());
 
         return ResponseEntity.ok(new JwtResponse(token));
     }
