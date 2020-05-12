@@ -2,6 +2,7 @@ package com.project.ewalet.controller;
 
 import com.project.ewalet.config.auth.JwtTokenUtil;
 import com.project.ewalet.mapper.OtpMapper;
+import com.project.ewalet.mapper.UserBalanceMapper;
 import com.project.ewalet.mapper.UserMapper;
 import com.project.ewalet.model.*;
 import com.project.ewalet.model.payload.OtpRequest;
@@ -46,6 +47,8 @@ public class UserController {
     private OtpMapper otpMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserBalanceMapper userBalanceMapper;
 
     @Value("${twilio.account.sid}")
     private String accountSid;
