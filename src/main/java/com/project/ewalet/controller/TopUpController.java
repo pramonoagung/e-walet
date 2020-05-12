@@ -75,14 +75,4 @@ public class TopUpController {
         Calendar cal = Calendar.getInstance();
         return dateFormat.format(cal.getTime());
     }
-
-    private ResponseEntity<?> confirmTopUp() {
-//        UserBalance userBalance = userBalanceMapper.findByUserId(user.getId());
-//        long actualBalance = userBalance.getBalance();
-//        long currentBalance = balanceCatalog.getBalance() + actualBalance;
-//
-//        //update user balance
-//        userBalanceMapper.updateUserBalance(currentBalance, user.getId());
-        return new ResponseEntity<>("", HttpStatus.OK);
-    }
 }
