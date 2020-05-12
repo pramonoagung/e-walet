@@ -42,6 +42,20 @@ public interface UserMapper {
     })
     User findByPhoneNumber(String phone_number);
 
+    @Select(findByEmail)
+    @Results(value = {
+            @Result(property = "id", column = "ID"),
+            @Result(property = "email", column = "EMAIL"),
+            @Result(property = "password", column = "PASSWORD"),
+            @Result(property = "first_name", column = "FIRST_NAME"),
+            @Result(property = "last_name", column = "LAST_NAME"),
+            @Result(property = "phone_number", column = "PHONE_NUMBER"),
+            @Result(property = "token", column = "TOKEN"),
+            @Result(property = "status", column = "STATUS"),
+            @Result(property = "created_at", column = "CREATED_AT")
+    })
+    User findByEmail(String email);
+
     @Insert(save)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void save(User user);

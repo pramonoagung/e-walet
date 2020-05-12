@@ -1,4 +1,4 @@
-package com.project.ewalet.model;
+package com.project.ewalet.model.payload;
 
 import lombok.Data;
 
