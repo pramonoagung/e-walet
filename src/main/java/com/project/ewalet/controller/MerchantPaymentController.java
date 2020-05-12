@@ -26,13 +26,11 @@ public class MerchantPaymentController {
     UserMapper userMapper;
 
     @PostMapping(value = "confirm-merchant-topup")
-    public ResponseEntity confirmMerchantTopUp(@RequestBody MerchantPaymentDTO paymentToken, Authentication authentication) {
-        User authenticatedUser = userMapper.findByPhoneNumber(authentication.getName());
-        TopUpHistory topUpHistoryLatest = topUpHistoryMapper.findLatestRecordByDateAndUserId(authenticatedUser.getId(),
-                8000 + authenticatedUser.getPhone_number());
+    public ResponseEntity confirmMerchantTopUp(@RequestBody MerchantPaymentDTO paymentToken) {
+        TopUpHistory lastTopUpHistory = topUpHistoryMapper.getLastHistoryByToken(paymentToken.getToken());
         JSONObject jsonResponse = new JSONObject();
-        if (topUpHistoryLatest.getToken() == paymentToken.getToken()){
-            topUpHistoryMapper.updateStatus(1, authenticatedUser.getId());
+        if (lastTopUpHistory == null){
+            topUpHistoryMapper.updateStatus(1, lastTopUpHistory.getUser_id());
             jsonResponse.put("status", 200);
             jsonResponse.put("message", "Success");
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
@@ -40,7 +38,7 @@ public class MerchantPaymentController {
         else {
             jsonResponse.put("status", 409);
             jsonResponse.put("message", "Invalid Token");
-            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.CONFLICT);
         }
     }
 }
