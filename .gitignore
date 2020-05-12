@@ -4,7 +4,7 @@ target/
 !**/src/main/**
 !**/src/test/**
 /src/main/resources/application.properties
-
+twillio.env
 ### STS ###
 .apt_generated
 .classpath
