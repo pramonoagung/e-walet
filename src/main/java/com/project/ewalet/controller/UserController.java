@@ -4,6 +4,7 @@ import com.project.ewalet.config.auth.JwtTokenUtil;
 import com.project.ewalet.mapper.OtpMapper;
 import com.project.ewalet.mapper.UserMapper;
 import com.project.ewalet.model.*;
+import com.project.ewalet.model.payload.OtpRequest;
 import com.project.ewalet.service.AsyncService;
 import com.project.ewalet.service.JwtUserDetailsService;
 import com.twilio.Twilio;

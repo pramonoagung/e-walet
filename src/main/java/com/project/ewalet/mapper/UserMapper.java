@@ -24,6 +24,7 @@ public interface UserMapper {
     final String auth = "SELECT * FROM USER WHERE EMAIL = #{email} AND PASSWORD = #{password}";
 
     final String findByEmail = "SELECT * FROM USER WHERE EMAIL = #{email}";
+    final String findByPhoneNumber = "SELECT * FROM USER WHERE phone_number = #{phone_number}";
     final String save = "INSERT INTO USER (EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER, TOKEN, STATUS, CREATED_AT ) " +
             "VALUES (#{email}, #{password}, #{first_name}, #{last_name}, #{phone_number}, #{token}, #{status}, #{created_at})";
     final String updateToken = "UPDATE USER SET TOKEN = #{token} WHERE ID = #{id}";
@@ -41,6 +42,20 @@ public interface UserMapper {
             @Result(property = "created_at", column = "CREATED_AT")
     })
     User findByEmail(String email);
+
+    @Select(findByPhoneNumber)
+    @Results(value = {
+            @Result(property = "id", column = "ID"),
+            @Result(property = "email", column = "EMAIL"),
+            @Result(property = "password", column = "PASSWORD"),
+            @Result(property = "first_name", column = "FIRST_NAME"),
+            @Result(property = "last_name", column = "LAST_NAME"),
+            @Result(property = "phone_number", column = "PHONE_NUMBER"),
+            @Result(property = "token", column = "TOKEN"),
+            @Result(property = "status", column = "STATUS"),
+            @Result(property = "created_at", column = "CREATED_AT")
+    })
+    User findByPhoneNumber(String phoneNumber);
 
     @Insert(save)
     @Options(useGeneratedKeys = true, keyProperty = "id")
