@@ -6,6 +6,7 @@ import com.project.ewalet.mapper.UserBalanceMapper;
 import com.project.ewalet.mapper.UserMapper;
 import com.project.ewalet.model.*;
 import com.project.ewalet.model.payload.OtpRequest;
+import com.project.ewalet.model.payload.UserPayload;
 import com.project.ewalet.service.AsyncService;
 import com.project.ewalet.service.JwtUserDetailsService;
 import com.twilio.Twilio;
@@ -27,7 +28,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -84,7 +84,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/sign-up")
-    public ResponseEntity<?> saveUser(@Valid @RequestBody UserDTO user) throws Exception {
+    public ResponseEntity<?> saveUser(@Valid @RequestBody UserPayload user) throws Exception {
         JSONObject jsonObject = new JSONObject();
         System.out.println(user);
         //TODO user input validation and respose

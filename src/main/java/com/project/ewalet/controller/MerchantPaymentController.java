@@ -2,14 +2,12 @@ package com.project.ewalet.controller;
 
 import com.project.ewalet.mapper.TopUpHistoryMapper;
 import com.project.ewalet.mapper.UserMapper;
-import com.project.ewalet.model.MerchantPaymentDTO;
+import com.project.ewalet.model.payload.MerchantPaymentPayload;
 import com.project.ewalet.model.TopUpHistory;
-import com.project.ewalet.model.User;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +24,7 @@ public class MerchantPaymentController {
     UserMapper userMapper;
 
     @PostMapping(value = "confirm-merchant-topup")
-    public ResponseEntity confirmMerchantTopUp(@RequestBody MerchantPaymentDTO paymentToken) {
+    public ResponseEntity confirmMerchantTopUp(@RequestBody MerchantPaymentPayload paymentToken) {
         TopUpHistory lastTopUpHistory = topUpHistoryMapper.getLastHistoryByToken(paymentToken.getToken());
         JSONObject jsonResponse = new JSONObject();
         if (lastTopUpHistory == null){
