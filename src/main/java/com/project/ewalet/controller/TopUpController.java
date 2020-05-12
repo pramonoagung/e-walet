@@ -28,8 +28,6 @@ public class TopUpController {
     @Autowired
     private PaymentMethodMapper paymentMethodMapper;
     @Autowired
-    private UserBalanceMapper userBalanceMapper;
-    @Autowired
     private UserMapper userMapper;
     @Autowired
     private TopUpHistoryMapper topUpHistoryMapper;
@@ -43,6 +41,7 @@ public class TopUpController {
         PaymentMethod paymentMethod = paymentMethodMapper.findByCode(topUpRequest.getPayment_type());
         User user = userMapper.findByPhoneNumber(topUpRequest.getPhone_number());
 
+
         //record to db
         TopUpHistory topUpHistory = new TopUpHistory();
         topUpHistory.setUser_id(user.getId());
@@ -51,7 +50,6 @@ public class TopUpController {
         topUpHistory.setPayment_method(paymentMethod.getPayment_type());
         topUpHistory.setStatus(0);
         topUpHistory.setCreated_at(getCurrentTime());
-        System.out.println("timnye " + getCurrentTime());
         topUpHistoryMapper.insert(topUpHistory);
 
         TopUpHistory topUpHistoryLatest = topUpHistoryMapper.findLatestRecordByDateAndUserId(user.getId(),

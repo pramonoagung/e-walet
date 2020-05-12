@@ -4,7 +4,9 @@ import com.project.ewalet.config.auth.JwtTokenUtil;
 import com.project.ewalet.mapper.OtpMapper;
 import com.project.ewalet.mapper.UserBalanceMapper;
 import com.project.ewalet.mapper.UserMapper;
-import com.project.ewalet.model.*;
+import com.project.ewalet.model.JwtRequest;
+import com.project.ewalet.model.Otp;
+import com.project.ewalet.model.User;
 import com.project.ewalet.model.payload.OtpRequest;
 import com.project.ewalet.model.payload.UserPayload;
 import com.project.ewalet.service.AsyncService;
@@ -96,7 +98,7 @@ public class UserController {
         User savedUser = userDetailsService.save(user);
         Otp otp = new Otp();
         otp.setUser_id(savedUser.getId());
-        otp.setCode(Integer.parseInt(otpCode));
+        otp.setCode(otpCode);
         otp.setStatus(true);
         otpMapper.save(otp);
 
@@ -140,7 +142,12 @@ public class UserController {
     public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otpRequest) {
         JSONObject jsonObject = new JSONObject();
         Otp otp = otpMapper.findByCode(otpRequest.getOtp_code());
-        if (!otp.isStatus()) {
+        System.out.println("isi otp "+otp);
+        if (otp == null) {
+            jsonObject.put("status", 404);
+            jsonObject.put("message", "OTP Code not found");
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
+        } else if (!otp.isStatus()) {
             jsonObject.put("status", 401);
             jsonObject.put("message", "OTP Code is expired");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);

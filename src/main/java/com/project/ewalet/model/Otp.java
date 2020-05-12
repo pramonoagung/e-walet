@@ -17,7 +17,7 @@ public class Otp {
     @Column(length = 11)
     private long user_id;
     @Column(length = 6)
-    private int code;
+    private String code;
     @Column(length = 6)
     private boolean status;
     @Column(length = 25)

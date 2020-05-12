@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class OtpRequest {
     private String phone_number;
-    private int otp_code;
+    private String otp_code;
 }

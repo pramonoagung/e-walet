@@ -20,7 +20,7 @@ public interface OtpMapper {
             @Result(property = "status", column = "status"),
             @Result(property = "created_at", column = "CREATED_AT")
     })
-    Otp findByCode(int code);
+    Otp findByCode(String code);
 
     @Insert(insert)
     @Options(useGeneratedKeys = true, keyProperty = "id")
