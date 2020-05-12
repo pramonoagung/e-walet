@@ -14,9 +14,6 @@ import java.util.ArrayList;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
-	
-//	@Autowired
-//	private UserRepository userRepository;
 
 	@Autowired
 	UserMapper userMapper;
@@ -26,11 +23,11 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userMapper.findByEmail(username);
+		User user = userMapper.findByPhoneNumber(username);
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found with email: " + username);
 		}
-		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+		return new org.springframework.security.core.userdetails.User(user.getPhone_number(), user.getPassword(),
 				new ArrayList<>());
 	}
 
@@ -47,8 +44,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 		newUser.setLast_name(user.getLast_name());
 		newUser.setPhone_number(user.getPhone_number());
 		userMapper.save(newUser);
-		User returnCreatedUser = userMapper.findByEmail(newUser.getEmail());
-		System.out.println("RETURN"+returnCreatedUser);
+		User returnCreatedUser = userMapper.findByPhoneNumber(newUser.getPhone_number());
 		return returnCreatedUser;
 	}
 }

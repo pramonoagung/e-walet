@@ -56,10 +56,10 @@ public class UserController {
     @PostMapping(value = "/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         JSONObject jsonObject = new JSONObject();
-        authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getEmail());
-        User user = userMapper.findByEmail(authenticationRequest.getEmail());
+                .loadUserByUsername(authenticationRequest.getUsername());
+        User user = userMapper.findByPhoneNumber(authenticationRequest.getUsername());
         if (user.getStatus() == 0) {
             jsonObject.put("status", 401);
             jsonObject.put("message", "Please activate you account");
@@ -128,7 +128,7 @@ public class UserController {
 
     @GetMapping(value = "/get-user-profile")
     public ResponseEntity getUserProfile(Authentication authentication, Principal principal) {
-        User userProfile = userMapper.findByEmail(authentication.getName());
+        User userProfile = userMapper.findByPhoneNumber(authentication.getName());
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
 

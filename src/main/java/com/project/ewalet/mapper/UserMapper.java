@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserMapper {
 
     final String getAll = "SELECT * FROM USER";
-    final String getById = "SELECT * FROM USER WHERE ID = #{id}";
+    final String getById = "SELECT * FROM USER WHERE ID = #{ID}";
     final String getByName = "SELECT * FROM USER WHERE NAME = #{name}";
     final String deleteById = "DELETE from USER WHERE ID = #{id}";
     final String insert = "INSERT INTO USER (NAME, BRANCH, PERCENTAGE, PHONE, EMAIL ) VALUES (#{name}, #{branch}, #{percentage}, #{phone}, #{email})";
@@ -23,12 +23,13 @@ public interface UserMapper {
     final String logout = "UPDATE USER SET LOGIN_STATUS = FALSE WHERE ID = #{id}";
     final String auth = "SELECT * FROM USER WHERE EMAIL = #{email} AND PASSWORD = #{password}";
 
+    final String findByPhoneNumber = "SELECT * FROM USER WHERE PHONE_NUMBER = #{phone_number}";
     final String findByEmail = "SELECT * FROM USER WHERE EMAIL = #{email}";
     final String save = "INSERT INTO USER (EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER, STATUS, CREATED_AT ) " +
             "VALUES (#{email}, #{password}, #{first_name}, #{last_name}, #{phone_number}, #{status}, #{created_at})";
     final String updateToken = "UPDATE USER SET TOKEN = #{token} WHERE ID = #{id}";
 
-    @Select(findByEmail)
+    @Select(findByPhoneNumber)
     @Results(value = {
             @Result(property = "id", column = "ID"),
             @Result(property = "email", column = "EMAIL"),
@@ -36,11 +37,10 @@ public interface UserMapper {
             @Result(property = "first_name", column = "FIRST_NAME"),
             @Result(property = "last_name", column = "LAST_NAME"),
             @Result(property = "phone_number", column = "PHONE_NUMBER"),
-//            @Result(property = "token", column = "TOKEN"),
             @Result(property = "status", column = "STATUS"),
             @Result(property = "created_at", column = "CREATED_AT")
     })
-    User findByEmail(String email);
+    User findByPhoneNumber(String phone_number);
 
     @Insert(save)
     @Options(useGeneratedKeys = true, keyProperty = "id")
