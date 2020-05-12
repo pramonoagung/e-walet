@@ -1,11 +1,11 @@
-package com.project.ewalet.model;
+package com.project.ewalet.model.payload;
 
 import lombok.Data;
 
 import javax.validation.constraints.Pattern;
 
 @Data
-public class UserDTO {
+public class UserPayload {
 	@Pattern(regexp = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$", message = "Invalid email format")
 	private String email;
 	@Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}$", message = "The password must contain at least 1 lowercase, 1 uppercase, 1 numeric, and more than 8 character")

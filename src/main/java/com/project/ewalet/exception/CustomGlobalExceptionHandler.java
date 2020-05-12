@@ -41,7 +41,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put("message", errors);
 
         return new ResponseEntity<>(body, headers, status);
-
     }
 
     @ExceptionHandler(RecordNotFoundException.class)

@@ -2,7 +2,7 @@ package com.project.ewalet.service;
 
 import com.project.ewalet.mapper.UserMapper;
 import com.project.ewalet.model.User;
-import com.project.ewalet.model.UserDTO;
+import com.project.ewalet.model.payload.UserPayload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,7 +36,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 //		userMapper.updateToken(token, user.getId());
 //	}
 	
-	public User save(UserDTO user) {
+	public User save(UserPayload user) {
 		User newUser = new User();
 		newUser.setEmail(user.getEmail());
 		newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
