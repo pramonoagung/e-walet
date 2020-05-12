@@ -19,7 +19,7 @@ public interface TopUpHistoryMapper {
     void insert(TopUpHistory topUpHistory);
 
     @Update(updateStatus)
-    void updateToken(int status, long user_id);
+    void updateStatus(int status, long user_id);
 
     @Select(getLatestRecord)
     @Results(value = {
@@ -32,4 +32,5 @@ public interface TopUpHistoryMapper {
             @Result(property = "created_at", column = "created_at")
     })
     TopUpHistory findLatestRecordByDateAndUserId(long user_id, String token);
+
 }

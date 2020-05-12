@@ -131,7 +131,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/get-user-profile")
-    public ResponseEntity getUserProfile(Authentication authentication, Principal principal) {
+    public ResponseEntity getUserProfile(Authentication authentication) {
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
