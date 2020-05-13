@@ -1,11 +1,15 @@
 package com.project.ewalet.controller;
 
-import com.project.ewalet.mapper.*;
+import com.project.ewalet.mapper.BalanceCatalogMapper;
+import com.project.ewalet.mapper.PaymentMethodMapper;
+import com.project.ewalet.mapper.TopUpHistoryMapper;
+import com.project.ewalet.mapper.UserMapper;
 import com.project.ewalet.model.BalanceCatalog;
 import com.project.ewalet.model.PaymentMethod;
 import com.project.ewalet.model.TopUpHistory;
 import com.project.ewalet.model.User;
 import com.project.ewalet.model.payload.TopUpRequest;
+import com.project.ewalet.utils.Utility;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +18,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 @RestController
 @CrossOrigin
@@ -31,6 +31,8 @@ public class TopUpController {
     private UserMapper userMapper;
     @Autowired
     private TopUpHistoryMapper topUpHistoryMapper;
+    @Autowired
+    private Utility utility;
 
     @PostMapping("/topup-balance")
     public ResponseEntity<?> topup(@RequestBody TopUpRequest topUpRequest) {
@@ -41,7 +43,6 @@ public class TopUpController {
         PaymentMethod paymentMethod = paymentMethodMapper.findByCode(topUpRequest.getPayment_type());
         User user = userMapper.findByPhoneNumber(topUpRequest.getPhone_number());
 
-
         //record to db
         TopUpHistory topUpHistory = new TopUpHistory();
         topUpHistory.setUser_id(user.getId());
@@ -49,7 +50,7 @@ public class TopUpController {
         topUpHistory.setToken(8000 + user.getPhone_number());
         topUpHistory.setPayment_method(paymentMethod.getPayment_type());
         topUpHistory.setStatus(0);
-        topUpHistory.setCreated_at(getCurrentTime());
+        topUpHistory.setCreated_at(utility.getCurrentTime());
         topUpHistoryMapper.insert(topUpHistory);
 
         TopUpHistory topUpHistoryLatest = topUpHistoryMapper.findLatestRecordByDateAndUserId(user.getId(),
@@ -66,11 +67,5 @@ public class TopUpController {
         jsonObject.put("message", "success");
 
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-    }
-
-    private String getCurrentTime() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-        return dateFormat.format(cal.getTime());
     }
 }

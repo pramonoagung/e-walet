@@ -8,22 +8,15 @@ import com.project.ewalet.model.JwtRequest;
 import com.project.ewalet.model.Otp;
 import com.project.ewalet.model.User;
 import com.project.ewalet.model.payload.OtpRequest;
-import com.project.ewalet.model.payload.SmsGatewayPayload;
 import com.project.ewalet.model.payload.UserPayload;
-import com.project.ewalet.service.AsyncService;
 import com.project.ewalet.service.JwtUserDetailsService;
-import com.project.ewalet.service.MQProducer;
 import com.project.ewalet.service.rabbitmq.MQPublisher;
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
+import com.project.ewalet.utils.Utility;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -33,9 +26,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.DecimalFormat;
-import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 
 @Configuration
 @RestController
@@ -76,19 +66,20 @@ public class UserController {
             jsonObject.put("data", data);
             return new ResponseEntity<>(jsonObject, HttpStatus.OK);
         }
-
         // userDetailsService.updateToken(token, authenticationRequest.getEmail());
-
     }
+
+    @Autowired
+    private Utility utility;
 
     @PostMapping(value = "/sign-up")
     public ResponseEntity<?> saveUser(@Valid @RequestBody UserPayload user) throws Exception {
         JSONObject jsonObject = new JSONObject();
-        System.out.println(user);
+
         //TODO user input validation and respose
         String CustomValidationResponse = "failed";
 
-        String otpCode = new DecimalFormat("000000").format(new Random().nextInt(999999));
+        String otpCode = utility.otpCode();
 
         User savedUser = userDetailsService.save(user);
         Otp otp = new Otp();
