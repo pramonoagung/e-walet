@@ -32,6 +32,7 @@ public class OtpController {
         JSONObject jsonObject = new JSONObject();
         String otpCode = new DecimalFormat("000000").format(new Random().nextInt(999999));
         if (validation.email(resendOtpRequest.getEmail()) && validation.phoneNumber(resendOtpRequest.getPhone_number())) {
+            //TODO save New OTP
             sendSms(resendOtpRequest.getPhone_number(), otpCode);
             sendEmail(resendOtpRequest.getEmail(), otpCode);
             return new ResponseEntity<>(jsonObject, HttpStatus.OK);
