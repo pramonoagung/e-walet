@@ -35,7 +35,7 @@ public class MQSubscriber {
     public void receiveSms(String message) {
         System.out.println((++counter) + " receive sms message : " + message);
         JSONObject jsonMessage = messageEncoder(message);
-        //asyncService.sendSms(jsonMessage.get("phoneNumber").toString(), jsonMessage.get("otpCode").toString());
+        asyncService.sendSms(jsonMessage.get("phoneNumber").toString(), jsonMessage.get("otpCode").toString());
     }
 
     @RabbitListener(queues = "emailQueue")
