@@ -35,14 +35,14 @@ public class MQSubscriber {
     public void receiveSms(String message) {
         System.out.println((++counter) + " receive sms message : " + message);
         JSONObject jsonMessage = messageEncoder(message);
-        asyncService.sendSms(jsonMessage.get("phoneNumber").toString(), jsonMessage.get("otpCode").toString());
+        //asyncService.sendSms(jsonMessage.get("phoneNumber").toString(), jsonMessage.get("otpCode").toString());
     }
 
     @RabbitListener(queues = "emailQueue")
     public void receiveEmail(String message) {
         System.out.println((++counter) + "receive email message : " + message);
         JSONObject jsonMessage = messageEncoder(message);
-        asyncService.sendEmail(jsonMessage.get("toMail").toString(), jsonMessage.get("otpCode").toString());
+        asyncService.sendEmail(jsonMessage.get("toEmail").toString(), jsonMessage.get("otpCode").toString());
     }
 
     public JSONObject messageEncoder(String message){

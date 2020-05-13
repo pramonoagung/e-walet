@@ -1,7 +1,6 @@
 package com.project.ewalet.service;
 
 import com.project.ewalet.model.payload.SmsGatewayPayload;
-import org.apache.ibatis.session.SqlSession;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +39,7 @@ public class AsyncService {
 
     @Async("asyncExecutor")
     public CompletableFuture<JSONObject> sendEmail(String toEmail, String code) {
+        JSONObject jsonObject = new JSONObject();
         String subject = "E-Walet";
         String body = "Your E-Walet verification code is " + code;
         try {
@@ -47,8 +47,8 @@ public class AsyncService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-        JSONObject jsonObject = new JSONObject();
         jsonObject.put("status", 200);
         return CompletableFuture.completedFuture(jsonObject);
+
     }
 }
