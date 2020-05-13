@@ -1,6 +1,9 @@
-package com.example.springboot.config;
+package com.project.ewalet.config.rabbitmq;
 
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,37 +12,28 @@ public class RabbitMQDirectConfig {
 
     @Bean
     Queue authQueue() {
-        return new Queue("authQueue", true);
+        return new Queue("smsQueue", true);
     }
 
     @Bean
     Queue cartQueue() {
-        return new Queue("cartQueue", true);
-    }
-
-    @Bean
-    Queue paymentQueue() {
-        return new Queue("paymentQueue", true);
+        return new Queue("emailQueue", true);
     }
 
     @Bean
     DirectExchange exchange() {
-        return new DirectExchange("store-direct-exchange");
+        return new DirectExchange("otp-direct-exchange");
     }
 
     @Bean
     Binding authBinding(Queue authQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(authQueue).to(exchange).with("auth");
+        return BindingBuilder.bind(authQueue).to(exchange).with("sms");
     }
 
     @Bean
     Binding cartBinding(Queue cartQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(cartQueue).to(exchange).with("cart");
+        return BindingBuilder.bind(cartQueue).to(exchange).with("email");
     }
 
-    @Bean
-    Binding paymentBinding(Queue paymentQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(paymentQueue).to(exchange).with("payment");
-    }
 
 }

@@ -1,28 +1,23 @@
-package com.example.springboot.service;
+package com.project.ewalet.service.rabbitmq;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RabbitMQSender {
+public class MQPublisher {
     @Autowired
     private AmqpTemplate amqpTemplate;
 
-    private String exchange = "store-direct-exchange";
+    private String exchange = "otp-direct-exchange";
 
     public void sendLoginAuth(String auth) {
-        amqpTemplate.convertAndSend(exchange, "auth", auth);
+        amqpTemplate.convertAndSend(exchange, "sms", auth);
         System.out.println("Send auth message " + auth);
     }
 
     public void sendCartItem(String cartItem) {
-        amqpTemplate.convertAndSend(exchange, "cart", cartItem);
+        amqpTemplate.convertAndSend(exchange, "email", cartItem);
         System.out.println("Send cart item message : " + cartItem);
-    }
-
-    public void sendPaymentConfirmation(String userId) {
-        amqpTemplate.convertAndSend(exchange, "payment", userId);
-        System.out.println("Send cart item message : " + userId);
     }
 }
