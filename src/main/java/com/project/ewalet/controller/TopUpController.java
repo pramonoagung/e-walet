@@ -40,7 +40,7 @@ public class TopUpController {
         JSONObject data = new JSONObject();
 
         BalanceCatalog balanceCatalog = balanceCatalogMapper.findByCode(topUpRequest.getCode());
-        PaymentMethod paymentMethod = paymentMethodMapper.findByCode(topUpRequest.getPayment_type());
+        PaymentMethod paymentMethod = paymentMethodMapper.getById(topUpRequest.getPayment_method_id());
         User user = userMapper.findByPhoneNumber(topUpRequest.getPhone_number());
 
         //record to db
@@ -48,7 +48,7 @@ public class TopUpController {
         topUpHistory.setUser_id(user.getId());
         topUpHistory.setTopup_balance(balanceCatalog.getBalance());
         topUpHistory.setToken(8000 + user.getPhone_number());
-        topUpHistory.setPayment_method(paymentMethod.getPayment_type());
+        topUpHistory.setPayment_method(paymentMethod.getId());
         topUpHistory.setStatus(0);
         topUpHistory.setCreated_at(utility.getCurrentTime());
         topUpHistoryMapper.insert(topUpHistory);
@@ -58,9 +58,11 @@ public class TopUpController {
 
         data.put("topup_balance", balanceCatalog.getBalance());
         data.put("payment_type", paymentMethod.getPayment_type());
+        data.put("name", paymentMethod.getName());
         data.put("invoice_id", topUpHistoryLatest.getId());
         data.put("token", topUpHistoryLatest.getToken());
         data.put("status", topUpHistoryLatest.getStatus());
+        data.put("created_at", topUpHistoryLatest.getCreated_at());
 
         jsonObject.put("status", 200);
         jsonObject.put("data", data);

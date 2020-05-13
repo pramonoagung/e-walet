@@ -14,7 +14,16 @@ import java.util.ArrayList;
 public interface PaymentMethodMapper {
 
     final String getAll = "SELECT * FROM PAYMENT_METHOD";
+    final String getById = "SELECT * FROM PAYMENT_METHOD WHERE ID = #{id}";
     final String findByCode = "SELECT * FROM payment_method where payment_type = #{payment_type}";
+
+    @Select(getById)
+    @Results(value = {
+            @Result(property = "id", column = "ID"),
+            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
+            @Result(property = "name", column = "NAME")
+    })
+    PaymentMethod getById(int id);
 
     @Select(getAll)
     @Results(value = {
