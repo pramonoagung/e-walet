@@ -8,10 +8,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
@@ -23,9 +20,9 @@ public class MerchantPaymentController {
     @Autowired
     UserMapper userMapper;
 
-    @PostMapping(value = "confirm-merchant-topup")
-    public ResponseEntity confirmMerchantTopUp(@RequestBody MerchantPaymentPayload paymentToken) {
-        TopUpHistory lastTopUpHistory = topUpHistoryMapper.getLastHistoryByToken(paymentToken.getToken());
+    @GetMapping(value = "confirm-merchant-topup/{token}")
+    public ResponseEntity confirmMerchantTopUp(@PathVariable String token) {
+        TopUpHistory lastTopUpHistory = topUpHistoryMapper.getLastHistoryByToken(token);
         JSONObject jsonResponse = new JSONObject();
         if (lastTopUpHistory == null){
             topUpHistoryMapper.updateStatus(1, lastTopUpHistory.getUser_id());
