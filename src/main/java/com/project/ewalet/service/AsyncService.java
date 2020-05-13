@@ -1,5 +1,6 @@
 package com.project.ewalet.service;
 
+import com.project.ewalet.model.payload.SmsGatewayPayload;
 import org.apache.ibatis.session.SqlSession;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class AsyncService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private SmsService smsService;
+
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
@@ -26,6 +30,12 @@ public class AsyncService {
 
     public AsyncService() {
         restTemplate = new RestTemplate();
+    }
+
+    @Async("asyncExecutor")
+    public CompletableFuture<SmsGatewayPayload> sendSms(String phoneNumber, String otpCode) {
+        SmsGatewayPayload response = smsService.sendSms(phoneNumber, otpCode);
+        return CompletableFuture.completedFuture(response);
     }
 
     @Async("asyncExecutor")

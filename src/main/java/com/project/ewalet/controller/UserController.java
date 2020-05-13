@@ -52,12 +52,12 @@ public class UserController {
     @Autowired
     private UserBalanceMapper userBalanceMapper;
 
-    @Value("${twilio.account.sid}")
-    private String accountSid;
-    @Value("${twilio.auth.token}")
-    private String authToken;
-    @Value("${twilio.phonenumber.trial}")
-    private String trialPhoneNumber;
+//    @Value("${twilio.account.sid}")
+//    private String accountSid;
+//    @Value("${twilio.auth.token}")
+//    private String authToken;
+//    @Value("${twilio.phonenumber.trial}")
+//    private String trialPhoneNumber;
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
@@ -172,23 +172,27 @@ public class UserController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
-
-    @Async
-    String sendSms(String phoneNumber, String code) {
-        String body = "Your E-Walet verification code is " + code;
-
-        Twilio.init(accountSid, authToken);
-        Message message = Message
-                .creator(new PhoneNumber("+" + phoneNumber),
-                        new PhoneNumber(trialPhoneNumber),
-                        body)
-                .create();
-        System.out.println(message.getStatus());
-        return "OTP sent";
-    }
+//
+//    @Async
+//    String sendSms(String phoneNumber, String code) {
+//        String body = "Your E-Walet verification code is " + code;
+//
+//        Twilio.init(accountSid, authToken);
+//        Message message = Message
+//                .creator(new PhoneNumber("+" + phoneNumber),
+//                        new PhoneNumber(trialPhoneNumber),
+//                        body)
+//                .create();
+//        System.out.println(message.getStatus());
+//        return "OTP sent";
+//    }
 
     @Autowired
     private AsyncService service;
+
+    void sendSms(String phoneNumber, String otpCode) {
+
+    }
 
     void sendEmail(String toEmail, String code) {
         CompletableFuture<JSONObject> sendEmail = service.sendEmail(toEmail, code);
