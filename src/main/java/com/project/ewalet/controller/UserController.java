@@ -76,6 +76,19 @@ public class UserController {
     public ResponseEntity<?> saveUser(@Valid @RequestBody UserPayload user) throws Exception {
         JSONObject jsonObject = new JSONObject();
 
+        User existingUserByPhoneNumber = userMapper.findByPhoneNumber(user.getPhone_number());
+        User existingUserByEmail = userMapper.findByEmail(user.getEmail());
+        if (existingUserByPhoneNumber != null) {
+            jsonObject.put("status", 406);
+            jsonObject.put("message", "User with phone number " + existingUserByPhoneNumber.getPhone_number() + " has already registered");
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
+        }
+        if (existingUserByEmail != null) {
+            jsonObject.put("status", 406);
+            jsonObject.put("message", "User with email " + existingUserByEmail.getEmail() + " has already registered");
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
+        }
+
         //TODO user input validation and respose
         String CustomValidationResponse = "failed";
 
@@ -120,7 +133,7 @@ public class UserController {
     public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otpRequest) {
         JSONObject jsonObject = new JSONObject();
         Otp otp = otpMapper.findByCode(otpRequest.getOtp_code());
-        System.out.println("isi otp "+otp);
+        System.out.println("isi otp " + otp);
         if (otp == null) {
             jsonObject.put("status", 404);
             jsonObject.put("message", "OTP Code not found");

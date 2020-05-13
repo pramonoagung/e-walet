@@ -4,6 +4,8 @@ import com.project.ewalet.model.TopUpHistory;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+
 @Repository
 @Mapper
 public interface TopUpHistoryMapper {
@@ -14,6 +16,7 @@ public interface TopUpHistoryMapper {
     final String getLatestRecord = "SELECT * from topup_history where user_id = #{user_id} and token = #{token}" +
             " ORDER BY created_at DESC limit 1";
     final String getLastHistoryByToken = "SELECT * FROM TOPUP_HISTORY WHERE TOKEN = #{token} ORDER BY ID DESC LIMIT 1";
+    final String getTopupHistoryByUserId = "SELECT * FROM TOPUP_HISTORY WHERE USER_ID = #{userId}";
 
     @Insert(insert)
     @Options(useGeneratedKeys = true, keyProperty = "id")
@@ -21,6 +24,18 @@ public interface TopUpHistoryMapper {
 
     @Update(updateStatus)
     void updateStatus(int status, long user_id);
+
+    @Select(getTopupHistoryByUserId)
+    @Results(value = {
+            @Result(property = "id", column = "ID"),
+            @Result(property = "payment_method", column = "payment_method"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "token", column = "token"),
+            @Result(property = "topup_balance", column = "topup_balance"),
+            @Result(property = "user_id", column = "user_id"),
+            @Result(property = "created_at", column = "created_at")
+    })
+    ArrayList<TopUpHistory> getTopUpHistoryByUserId(long user_id);
 
     @Select(getLatestRecord)
     @Results(value = {
