@@ -28,14 +28,22 @@ public class BankPaymentController {
 
         TopUpHistory topUpHistory = topUpHistoryMapper.getLastHistoryByToken(token);
         topUpHistoryMapper.updateStatus(1, topUpHistory.getUser_id());
-
         UserBalance userBalance = userBalanceMapper.findByUserId(topUpHistory.getUser_id());
-        long actualBalance = userBalance.getBalance();
-        long currentBalance = topUpHistory.getTopup_balance() + actualBalance;
-
-        //update user balance
-        userBalanceMapper.updateUserBalance(currentBalance, topUpHistory.getUser_id());
+        long currentBalance, firstBalance;
         JSONObject jsonObject = new JSONObject();
+        if (userBalance == null) {
+            UserBalance newUserBalance = new UserBalance();
+            firstBalance = topUpHistory.getTopup_balance();
+            newUserBalance.setBalance(firstBalance);
+            newUserBalance.setUser_id(topUpHistory.getUser_id());
+            System.out.println("user balance "+ newUserBalance);
+            userBalanceMapper.insert(newUserBalance);
+        } else {
+            long actualBalance = userBalance.getBalance();
+            currentBalance = topUpHistory.getTopup_balance() + actualBalance;
+            //update user balance
+            userBalanceMapper.updateUserBalance(currentBalance, topUpHistory.getUser_id());
+        }
         jsonObject.put("status", 200);
         jsonObject.put("message", "e-walet has been topped up with Rp " + topUpHistory.getTopup_balance());
 

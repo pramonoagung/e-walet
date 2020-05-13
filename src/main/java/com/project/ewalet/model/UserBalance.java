@@ -17,5 +17,4 @@ public class UserBalance {
     private long user_id;
     @Column(columnDefinition="BIGINT(20)")
     private long balance;
-
 }
