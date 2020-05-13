@@ -8,6 +8,7 @@ import com.project.ewalet.model.JwtRequest;
 import com.project.ewalet.model.Otp;
 import com.project.ewalet.model.User;
 import com.project.ewalet.model.payload.OtpRequest;
+import com.project.ewalet.model.payload.SmsGatewayPayload;
 import com.project.ewalet.model.payload.UserPayload;
 import com.project.ewalet.service.AsyncService;
 import com.project.ewalet.service.JwtUserDetailsService;
@@ -191,7 +192,7 @@ public class UserController {
     private AsyncService service;
 
     void sendSms(String phoneNumber, String otpCode) {
-
+        CompletableFuture<SmsGatewayPayload> sendSms = service.sendSms(phoneNumber, otpCode);
     }
 
     void sendEmail(String toEmail, String code) {
