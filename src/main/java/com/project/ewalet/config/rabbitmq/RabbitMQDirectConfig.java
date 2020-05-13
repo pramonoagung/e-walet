@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQDirectConfig {
 
     @Bean
-    Queue authQueue() {
+    Queue smsQueue() {
         return new Queue("smsQueue", true);
     }
 
     @Bean
-    Queue cartQueue() {
+    Queue emailQueue() {
         return new Queue("emailQueue", true);
     }
 
@@ -26,13 +26,13 @@ public class RabbitMQDirectConfig {
     }
 
     @Bean
-    Binding authBinding(Queue authQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(authQueue).to(exchange).with("sms");
+    Binding smsBinding(Queue smsQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(smsQueue).to(exchange).with("sms");
     }
 
     @Bean
-    Binding cartBinding(Queue cartQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(cartQueue).to(exchange).with("email");
+    Binding emailBinding(Queue emailQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(emailQueue).to(exchange).with("email");
     }
 
 

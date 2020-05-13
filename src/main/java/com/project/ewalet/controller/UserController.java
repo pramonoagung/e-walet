@@ -12,6 +12,8 @@ import com.project.ewalet.model.payload.SmsGatewayPayload;
 import com.project.ewalet.model.payload.UserPayload;
 import com.project.ewalet.service.AsyncService;
 import com.project.ewalet.service.JwtUserDetailsService;
+import com.project.ewalet.service.MQProducer;
+import com.project.ewalet.service.rabbitmq.MQPublisher;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -189,14 +191,20 @@ public class UserController {
 //    }
 
     @Autowired
-    private AsyncService service;
+    private MQPublisher mqPublisher;
 
     void sendSms(String phoneNumber, String otpCode) {
-        CompletableFuture<SmsGatewayPayload> sendSms = service.sendSms(phoneNumber, otpCode);
+        JSONObject jsonSendSms = new JSONObject();
+        jsonSendSms.put("phoneNumber", phoneNumber);
+        jsonSendSms.put("otpCode", otpCode);
+        mqPublisher.mqSendSms(jsonSendSms.toString());
     }
 
-    void sendEmail(String toEmail, String code) {
-        CompletableFuture<JSONObject> sendEmail = service.sendEmail(toEmail, code);
+    void sendEmail(String toEmail, String otpCode) {
+        JSONObject jsonSendEmail = new JSONObject();
+        jsonSendEmail.put("toEmail", toEmail);
+        jsonSendEmail.put("otpCode", otpCode);
+        mqPublisher.mqSendEmail(jsonSendEmail.toString());
     }
 
 }
