@@ -11,13 +11,13 @@ public class MQPublisher {
 
     private String exchange = "otp-direct-exchange";
 
-    public void mqSendSms(String auth) {
-        amqpTemplate.convertAndSend(exchange, "sms", auth);
-        System.out.println("Send auth message " + auth);
+    public void mqSendSms(String phoneNumber) {
+        amqpTemplate.convertAndSend(exchange, "sms", phoneNumber);
+        System.out.println("Send auth message " + phoneNumber);
     }
 
-    public void mqSendEmail(String cartItem) {
-        amqpTemplate.convertAndSend(exchange, "email", cartItem);
-        System.out.println("Send cart item message : " + cartItem);
+    public void mqSendEmail(String email) {
+        amqpTemplate.convertAndSend(exchange, "email", email);
+        System.out.println("Send cart item message : " + email);
     }
 }

@@ -26,5 +26,4 @@ public interface UserBalanceMapper {
     @Insert(insert)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(UserBalance userBalance);
-
 }

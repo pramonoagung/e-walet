@@ -55,13 +55,6 @@ public class UserController {
     @Autowired
     private UserBalanceMapper userBalanceMapper;
 
-//    @Value("${twilio.account.sid}")
-//    private String accountSid;
-//    @Value("${twilio.auth.token}")
-//    private String authToken;
-//    @Value("${twilio.phonenumber.trial}")
-//    private String trialPhoneNumber;
-
     @PostMapping(value = "/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         JSONObject jsonObject = new JSONObject();
@@ -96,7 +89,6 @@ public class UserController {
         String CustomValidationResponse = "failed";
 
         String otpCode = new DecimalFormat("000000").format(new Random().nextInt(999999));
-        //
 
         User savedUser = userDetailsService.save(user);
         Otp otp = new Otp();
@@ -107,14 +99,6 @@ public class UserController {
 
         sendSms(savedUser.getPhone_number(), otpCode);
         sendEmail(savedUser.getEmail(), otpCode);
-
-        //TODO perform sendOtp() thru MQ
-        /*JSONObject payload = new JSONObject();
-        payload.put("key", 1);
-        payload.put("email", savedUser.getEmail());
-        payload.put("phone_number", savedUser.getPhone_number());
-        payload.put("otp_code", otpCode);
-        MQProducer.sendOtp(payload.toString());*/
 
         if (savedUser != null) {
             jsonObject.put("status", 200);
@@ -175,20 +159,6 @@ public class UserController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
-//
-//    @Async
-//    String sendSms(String phoneNumber, String code) {
-//        String body = "Your E-Walet verification code is " + code;
-//
-//        Twilio.init(accountSid, authToken);
-//        Message message = Message
-//                .creator(new PhoneNumber("+" + phoneNumber),
-//                        new PhoneNumber(trialPhoneNumber),
-//                        body)
-//                .create();
-//        System.out.println(message.getStatus());
-//        return "OTP sent";
-//    }
 
     @Autowired
     private MQPublisher mqPublisher;
