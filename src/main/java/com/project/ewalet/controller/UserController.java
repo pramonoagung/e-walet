@@ -151,7 +151,9 @@ public class UserController {
     }
     @GetMapping(value = "/get-user-balance")
     public ResponseEntity<?> getUserBalance(Authentication authentication) {
-        UserBalance userBalance = userBalanceMapper.findByUserId(userMapper.findByPhoneNumber(authentication.getName()).getId());
+        long userId = userMapper.findByPhoneNumber(authentication.getName()).getId();
+        UserBalance userBalance = userBalanceMapper.findByUserId(userId);
+        System.out.println(userBalance);
         JSONObject jsonResponse = new JSONObject();
         if (userBalance != null) {
             jsonResponse.put("status", 200);
