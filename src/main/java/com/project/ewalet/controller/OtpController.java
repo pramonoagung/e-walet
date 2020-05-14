@@ -1,8 +1,12 @@
 package com.project.ewalet.controller;
 
 import com.project.ewalet.mapper.OtpMapper;
+import com.project.ewalet.mapper.UserMapper;
+import com.project.ewalet.model.Otp;
+import com.project.ewalet.model.User;
 import com.project.ewalet.model.payload.ResendOtpRequest;
 import com.project.ewalet.service.rabbitmq.MQPublisher;
+import com.project.ewalet.utils.Utility;
 import com.project.ewalet.utils.Validation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +30,24 @@ public class OtpController {
     Validation validation;
     @Autowired
     private MQPublisher mqPublisher;
+    @Autowired
+    private Utility utility;
+    @Autowired
+    private UserMapper userMapper;
 
     @PostMapping("/resend-otp")
     public ResponseEntity<?> resendOtp(@RequestBody ResendOtpRequest resendOtpRequest) {
         JSONObject jsonObject = new JSONObject();
-        String otpCode = new DecimalFormat("000000").format(new Random().nextInt(999999));
         if (validation.email(resendOtpRequest.getEmail()) && validation.phoneNumber(resendOtpRequest.getPhone_number())) {
-            //TODO save New OTP
+            String otpCode = utility.otpCode();
+            User user = userMapper.findByEmail(resendOtpRequest.getEmail());
+            Otp otp = new Otp();
+            otp.setUser_id(user.getId());
+            otp.setCode(otpCode);
+            otp.setStatus(true);
+            otp.setCreated_at(utility.getCurrentTimeOtp());
+            otpMapper.save(otp);
+
             sendSms(resendOtpRequest.getPhone_number(), otpCode);
             sendEmail(resendOtpRequest.getEmail(), otpCode);
             return new ResponseEntity<>(jsonObject, HttpStatus.OK);

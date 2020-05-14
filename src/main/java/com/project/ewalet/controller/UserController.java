@@ -150,7 +150,6 @@ public class UserController {
     public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otpRequest) {
         JSONObject jsonObject = new JSONObject();
         Otp otp = otpMapper.findByCode(otpRequest.getOtp_code());
-        System.out.println("isi otp " + otp);
         if (otp == null) {
             jsonObject.put("status", 404);
             jsonObject.put("message", "OTP Code not found");

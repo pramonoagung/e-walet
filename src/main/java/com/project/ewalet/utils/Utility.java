@@ -21,7 +21,7 @@ public class Utility {
     }
 
     public String getCurrentTimeOtp() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
         Calendar cal = Calendar.getInstance();
         return dateFormat.format(cal.getTime());
     }
