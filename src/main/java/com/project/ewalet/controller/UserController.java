@@ -7,6 +7,7 @@ import com.project.ewalet.mapper.UserMapper;
 import com.project.ewalet.model.JwtRequest;
 import com.project.ewalet.model.Otp;
 import com.project.ewalet.model.User;
+import com.project.ewalet.model.UserBalance;
 import com.project.ewalet.model.payload.OtpRequest;
 import com.project.ewalet.model.payload.UserPayload;
 import com.project.ewalet.service.JwtUserDetailsService;
@@ -128,6 +129,21 @@ public class UserController {
     public ResponseEntity getUserProfile(Authentication authentication) {
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
+    }
+    @GetMapping(value = "/get-user-balance")
+    public ResponseEntity getUserBalance(Authentication authentication) {
+        JSONObject jsonResponse = new JSONObject();
+        UserBalance userBalance = userBalanceMapper.findByUserId(userMapper.findByPhoneNumber(authentication.getName()).getId());
+        if (userBalance != null) {
+            jsonResponse.put("status", 204);
+            jsonResponse.put("data", new JSONObject().put("amount", userBalance.getBalance()));
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        else {
+            jsonResponse.put("status", 204);
+            jsonResponse.put("message", "Balance for user " + authentication.getName() + "is empty");
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
     }
 
     @PostMapping(value = "/verify-otp")
