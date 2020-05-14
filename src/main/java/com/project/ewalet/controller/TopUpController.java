@@ -60,7 +60,7 @@ public class TopUpController {
         TopUpHistory topUpHistoryLatest = topUpHistoryMapper.findLatestRecordByDateAndUserId(user.getId(),
                 8000 + user.getPhone_number());
 
-        System.out.println(timerTask(topUpHistoryLatest.getId()));
+        System.out.println(paymentExpirationTask(topUpHistoryLatest.getId()));
 
         data.put("topup_balance", balanceCatalog.getBalance());
         data.put("payment_type", paymentMethod.getPayment_type());
@@ -77,20 +77,20 @@ public class TopUpController {
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
     }
 
-    public String timerTask(long id) {
-        System.out.println("TIMER TASK RUN FOR 5 SECOND with id: " + id + " on " + new Date());
+    public String paymentExpirationTask(long id) {
+        System.out.println("Timer task run for 5 minutes with payment id: " + id + " on " + new Date());
 
         TimerTask task = new TimerTask() {
             public void run() {
                 System.out.println("Task performed on: " + new Date() + "n"
                         + "Thread's name: " + Thread.currentThread().getName());
-                topUpHistoryMapper.getTopUpHistoryById(id);
+                topUpHistoryMapper.updateStatusById(2 ,id);
             }
         };
-        System.out.println("RUN");
         Timer timer = new Timer("Expiring Payment");
-        long delay = 5000L;
+        long hourInMillis = 1000 * 60 * 60;
+        long delay = hourInMillis/12;
         timer.schedule(task, delay);
-        return "task has been initialize";
+        return "expiration task has been initialize";
     }
 }
