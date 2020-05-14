@@ -1,6 +1,7 @@
 package com.project.ewalet.mapper;
 
 import com.project.ewalet.model.TopUpHistory;
+import com.project.ewalet.model.payload.TopUpHistoryPayload;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,21 @@ public interface TopUpHistoryMapper {
     final String getLastHistoryByToken = "SELECT * FROM TOPUP_HISTORY WHERE TOKEN = #{token} ORDER BY ID DESC LIMIT 1";
     final String getTopupHistoryByUserId = "SELECT * FROM TOPUP_HISTORY WHERE USER_ID = #{userId}";
     final String getTopupHistoryById = "SELECT * FROM TOPUP_HISTORY WHERE ID = #{id}";
+    final String getTopupHistoryWithFileByUserId = "SELECT * FROM TOPUP_HISTORY AS T JOIN FILES AS F" +
+            " ON T.FILE_UPLOAD_ID = F.ID WHERE T.USER_ID = #{user_id}";
+
+    @Select(getTopupHistoryWithFileByUserId)
+    @Results(value = {
+            @Result(property = "id", column = "ID"),
+            @Result(property = "user_id", column = "USER_ID"),
+            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
+            @Result(property = "token", column = "TOKEN"),
+            @Result(property = "payment_method", column = "PAYMENT_METHOD"),
+            @Result(property = "status", column = "STATUS"),
+            @Result(property = "path", column = "PATH"),
+            @Result(property = "created_at", column = "CREATED_AT")
+    })
+    ArrayList<TopUpHistoryPayload> getTopupHistoryWithFileByUserId(long user_id);
 
     @Insert(insert)
     @Options(useGeneratedKeys = true, keyProperty = "id")

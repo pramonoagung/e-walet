@@ -4,6 +4,7 @@ import com.project.ewalet.mapper.TopUpHistoryMapper;
 import com.project.ewalet.mapper.UserMapper;
 import com.project.ewalet.model.TopUpHistory;
 import com.project.ewalet.model.User;
+import com.project.ewalet.model.payload.TopUpHistoryPayload;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,8 +31,8 @@ public class TopUpHistoryController {
         JSONObject jsonResponse = new JSONObject();
 
         User user = userMapper.findByPhoneNumber(authentication.getName());
-        ArrayList<TopUpHistory> userTopUpHistory = topUpHistoryMapper.getTopUpHistoryByUserId(user.getId());
-
+        ArrayList<TopUpHistoryPayload> userTopUpHistory = topUpHistoryMapper.getTopupHistoryWithFileByUserId(user.getId());
+        System.out.println(userTopUpHistory);
         jsonResponse.put("status", 200);
         jsonResponse.put("data", userTopUpHistory);
         jsonResponse.put("message", "success");
