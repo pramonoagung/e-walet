@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 @RestController
 @CrossOrigin
 public class TopUpController {
@@ -56,6 +60,8 @@ public class TopUpController {
         TopUpHistory topUpHistoryLatest = topUpHistoryMapper.findLatestRecordByDateAndUserId(user.getId(),
                 8000 + user.getPhone_number());
 
+        System.out.println(timerTask(topUpHistoryLatest.getId()));
+
         data.put("topup_balance", balanceCatalog.getBalance());
         data.put("payment_type", paymentMethod.getPayment_type());
         data.put("name", paymentMethod.getName());
@@ -69,5 +75,21 @@ public class TopUpController {
         jsonObject.put("message", "success");
 
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+    }
+
+    public String timerTask(long id) {
+        System.out.println("TIMER TASK RUN FOR 5 SECOND with id: " + id);
+
+        TimerTask task = new TimerTask() {
+            public void run() {
+                System.out.println("Task performed on: " + new Date() + "n"
+                        + "Thread's name: " + Thread.currentThread().getName());
+            }
+        };
+        System.out.println("RUN");
+        Timer timer = new Timer("Timer");
+        long delay = 5000L;
+        timer.schedule(task, delay);
+        return "task has been initialize";
     }
 }
