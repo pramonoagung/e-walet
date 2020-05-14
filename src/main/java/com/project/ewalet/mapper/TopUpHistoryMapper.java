@@ -40,7 +40,7 @@ public interface TopUpHistoryMapper {
             @Result(property = "user_id", column = "USER_ID"),
             @Result(property = "created_at", column = "CREATED_AT")
     })
-    ArrayList<TopUpHistory> getTopUpHistoryById(long id);
+    TopUpHistory getTopUpHistoryById(long id);
 
     @Select(getTopupHistoryByUserId)
     @Results(value = {
