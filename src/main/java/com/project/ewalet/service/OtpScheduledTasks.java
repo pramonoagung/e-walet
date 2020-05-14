@@ -21,7 +21,7 @@ public class OtpScheduledTasks {
 
     static final long ONE_MINUTE_IN_MILLIS = 60000;//millisecs
 
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 0/3 * * * *")
     public void performTaskUsingCron() throws ParseException {
         List<Otp> otpList = otpMapper.getAllActiveOtp();
 
@@ -36,7 +36,7 @@ public class OtpScheduledTasks {
             Calendar date = Calendar.getInstance();
             long t = date.getTimeInMillis();
             Date actualDate = new Date(t);
-            
+
             if (actualDate.after(otpExpiry)) {
                 otp.setStatus(false);
                 otpMapper.update(otp);

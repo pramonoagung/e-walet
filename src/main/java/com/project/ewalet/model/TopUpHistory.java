@@ -27,5 +27,7 @@ public class TopUpHistory {
     @Column
     private int status;
     @Column
+    private String file_path;
+    @Column
     private String created_at;
 }
