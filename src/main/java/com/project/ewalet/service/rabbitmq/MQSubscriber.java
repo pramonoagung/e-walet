@@ -31,14 +31,14 @@ public class MQSubscriber {
     @Autowired
     SmsService smsService;
 
-    @RabbitListener(queues = "smsQueue")
+    @RabbitListener(queues = "smsQueue-prod")
     public void receiveSms(String message) {
         System.out.println((++counter) + " receive sms message : " + message);
         JSONObject jsonMessage = messageEncoder(message);
         asyncService.sendSms(jsonMessage.get("phoneNumber").toString(), jsonMessage.get("otpCode").toString());
     }
 
-    @RabbitListener(queues = "emailQueue")
+    @RabbitListener(queues = "emailQueue-prod")
     public void receiveEmail(String message) {
         System.out.println((++counter) + "receive email message : " + message);
         JSONObject jsonMessage = messageEncoder(message);

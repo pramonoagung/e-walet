@@ -12,27 +12,27 @@ public class RabbitMQDirectConfig {
 
     @Bean
     Queue smsQueue() {
-        return new Queue("smsQueue", true);
+        return new Queue("smsQueue-prod", true);
     }
 
     @Bean
     Queue emailQueue() {
-        return new Queue("emailQueue", true);
+        return new Queue("emailQueue-prod", true);
     }
 
     @Bean
     DirectExchange exchange() {
-        return new DirectExchange("otp-direct-exchange");
+        return new DirectExchange("otp-direct-exchange-prod");
     }
 
     @Bean
     Binding smsBinding(Queue smsQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(smsQueue).to(exchange).with("sms");
+        return BindingBuilder.bind(smsQueue).to(exchange).with("sms-prod");
     }
 
     @Bean
     Binding emailBinding(Queue emailQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(emailQueue).to(exchange).with("email");
+        return BindingBuilder.bind(emailQueue).to(exchange).with("email-prod");
     }
 
 
