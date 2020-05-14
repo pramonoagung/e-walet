@@ -127,8 +127,23 @@ public class UserController {
 
     @GetMapping(value = "/get-user-profile")
     public ResponseEntity getUserProfile(Authentication authentication) {
+        JSONObject jsonResponse = new JSONObject();
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
-        return new ResponseEntity<>(userProfile, HttpStatus.OK);
+        if (userProfile != null) {
+            jsonResponse.put("status", 204);
+            JSONObject data = new JSONObject();
+            data.put("first_name", userProfile.getFirst_name());
+            data.put("last_name", userProfile.getLast_name());
+            data.put("email", userProfile.getEmail());
+            data.put("phone_number", userProfile.getPhone_number());
+            jsonResponse.put("data", data);
+            return new ResponseEntity(jsonResponse, HttpStatus.OK);
+        }
+        else {
+            jsonResponse.put("status", 204);
+            jsonResponse.put("message", "Balance for user " + authentication.getName() + "is empty");
+            return new ResponseEntity(jsonResponse, HttpStatus.NO_CONTENT);
+        }
     }
     @GetMapping(value = "/get-user-balance")
     public ResponseEntity getUserBalance(Authentication authentication) {
