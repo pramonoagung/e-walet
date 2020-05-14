@@ -160,7 +160,7 @@ public class UserController {
         }
         else {
             jsonResponse.put("status", 404);
-            jsonResponse.put("message", "Balance for user " + authentication.getName() + " is empty");
+            jsonResponse.put("data", new JSONObject().put("amount", 0));
             return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_FOUND);
         }
     }
