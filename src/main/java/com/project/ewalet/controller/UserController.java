@@ -176,7 +176,7 @@ public class UserController {
             jsonObject.put("status", 404);
             jsonObject.put("message", "OTP Code not found");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        } else if (!otp.isStatus() || validation.otpExpiry(otp.getCreated_at()) == false) {
+        } else if (!otp.isStatus() || !validation.otpExpiry(otp.getCreated_at())) {
             jsonObject.put("status", 401);
             jsonObject.put("message", "OTP Code has expired");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
