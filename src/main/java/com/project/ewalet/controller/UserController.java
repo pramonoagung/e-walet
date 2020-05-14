@@ -12,6 +12,7 @@ import com.project.ewalet.model.payload.UserPayload;
 import com.project.ewalet.service.JwtUserDetailsService;
 import com.project.ewalet.service.rabbitmq.MQPublisher;
 import com.project.ewalet.utils.Utility;
+import com.project.ewalet.utils.Validation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
 
 @Configuration
 @RestController
@@ -44,6 +46,8 @@ public class UserController {
     private UserMapper userMapper;
     @Autowired
     private UserBalanceMapper userBalanceMapper;
+    @Autowired
+    private Validation validation;
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
@@ -131,16 +135,16 @@ public class UserController {
     }
 
     @PostMapping(value = "/verify-otp")
-    public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otpRequest) {
+    public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otpRequest) throws ParseException {
         JSONObject jsonObject = new JSONObject();
         Otp otp = otpMapper.findByCode(otpRequest.getOtp_code());
         if (otp == null) {
             jsonObject.put("status", 404);
             jsonObject.put("message", "OTP Code not found");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        } else if (!otp.isStatus()) {
+        } else if (!otp.isStatus() || validation.otpExpiry(otp.getCreated_at()) == false) {
             jsonObject.put("status", 401);
-            jsonObject.put("message", "OTP Code is expired");
+            jsonObject.put("message", "OTP Code has expired");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
         } else {
             User user = userMapper.getById(otp.getUser_id());
