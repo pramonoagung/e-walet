@@ -126,7 +126,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/get-user-profile")
-    public ResponseEntity getUserProfile(Authentication authentication) {
+    public ResponseEntity<?> getUserProfile(Authentication authentication) {
         JSONObject jsonResponse = new JSONObject();
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
         if (userProfile != null) {
@@ -137,27 +137,27 @@ public class UserController {
             data.put("email", userProfile.getEmail());
             data.put("phone_number", userProfile.getPhone_number());
             jsonResponse.put("data", data);
-            return new ResponseEntity(jsonResponse, HttpStatus.OK);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         }
         else {
             jsonResponse.put("status", 204);
             jsonResponse.put("message", "Balance for user " + authentication.getName() + "is empty");
-            return new ResponseEntity(jsonResponse, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NO_CONTENT);
         }
     }
     @GetMapping(value = "/get-user-balance")
-    public ResponseEntity getUserBalance(Authentication authentication) {
+    public ResponseEntity<?> getUserBalance(Authentication authentication) {
         JSONObject jsonResponse = new JSONObject();
         UserBalance userBalance = userBalanceMapper.findByUserId(userMapper.findByPhoneNumber(authentication.getName()).getId());
         if (userBalance != null) {
             jsonResponse.put("status", 200);
             jsonResponse.put("data", new JSONObject().put("amount", userBalance.getBalance()));
-            return new ResponseEntity(jsonResponse, HttpStatus.OK);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         }
         else {
             jsonResponse.put("status", 204);
             jsonResponse.put("message", "Balance for user " + authentication.getName() + "is empty");
-            return new ResponseEntity(jsonResponse, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NO_CONTENT);
         }
     }
 
