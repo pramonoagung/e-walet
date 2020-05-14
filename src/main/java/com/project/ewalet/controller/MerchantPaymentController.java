@@ -35,7 +35,7 @@ public class MerchantPaymentController {
             }
             else {
                 UserBalance newUserBalance = new UserBalance();
-                newUserBalance.setUser_id(topUpHistory.getId());
+                newUserBalance.setUser_id(topUpHistory.getUser_id());
                 newUserBalance.setBalance(topUpHistory.getTopup_balance());
                 userBalanceMapper.insert(newUserBalance);
             }
