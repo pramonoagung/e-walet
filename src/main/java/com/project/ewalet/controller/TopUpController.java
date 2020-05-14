@@ -78,16 +78,17 @@ public class TopUpController {
     }
 
     public String timerTask(long id) {
-        System.out.println("TIMER TASK RUN FOR 5 SECOND with id: " + id);
+        System.out.println("TIMER TASK RUN FOR 5 SECOND with id: " + id + " on " + new Date());
 
         TimerTask task = new TimerTask() {
             public void run() {
                 System.out.println("Task performed on: " + new Date() + "n"
                         + "Thread's name: " + Thread.currentThread().getName());
+                topUpHistoryMapper.getTopUpHistoryById(id);
             }
         };
         System.out.println("RUN");
-        Timer timer = new Timer("Timer");
+        Timer timer = new Timer("Expiring Payment");
         long delay = 5000L;
         timer.schedule(task, delay);
         return "task has been initialize";
