@@ -2,6 +2,7 @@ package com.project.ewalet.controller;
 
 import com.project.ewalet.mapper.BalanceCatalogMapper;
 import com.project.ewalet.model.BalanceCatalog;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,18 @@ public class BalanceCatalogController {
 
     @GetMapping("/get-balance-catalog")
     public ResponseEntity getBalanceCatalog() {
-
-        return new ResponseEntity<ArrayList<BalanceCatalog>>(balanceCatalogMapper.getAll(), HttpStatus.OK);
+        ArrayList<BalanceCatalog> balanceCatalogArrayList = balanceCatalogMapper.getAll();
+        JSONObject jsonResponse = new JSONObject();
+        if (balanceCatalogArrayList != null) {
+            jsonResponse.put("status", 200);
+            jsonResponse.put("data", balanceCatalogArrayList);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        }
+        else {
+            jsonResponse.put("status", 404);
+            jsonResponse.put("message", "Balance catalog is empty");
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_FOUND);
+        }
     }
 
 }
