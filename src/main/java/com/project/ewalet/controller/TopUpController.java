@@ -91,7 +91,7 @@ public class TopUpController {
         };
         Timer timer = new Timer(""+id);
         long hourInMillis = 1000 * 60 * 60;
-        long delay = 30000L;
+        long delay = 120000L;
         timer.schedule(task, delay);
         return "expiration task has been initialize";
     }
