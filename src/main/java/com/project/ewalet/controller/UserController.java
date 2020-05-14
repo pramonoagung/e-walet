@@ -7,11 +7,13 @@ import com.project.ewalet.mapper.UserMapper;
 import com.project.ewalet.model.JwtRequest;
 import com.project.ewalet.model.Otp;
 import com.project.ewalet.model.User;
+import com.project.ewalet.model.UserBalance;
 import com.project.ewalet.model.payload.OtpRequest;
 import com.project.ewalet.model.payload.UserPayload;
 import com.project.ewalet.service.JwtUserDetailsService;
 import com.project.ewalet.service.rabbitmq.MQPublisher;
 import com.project.ewalet.utils.Utility;
+import com.project.ewalet.utils.Validation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
 
 @Configuration
 @RestController
@@ -44,6 +47,8 @@ public class UserController {
     private UserMapper userMapper;
     @Autowired
     private UserBalanceMapper userBalanceMapper;
+    @Autowired
+    private Validation validation;
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
@@ -125,22 +130,52 @@ public class UserController {
     }
 
     @GetMapping(value = "/get-user-profile")
-    public ResponseEntity getUserProfile(Authentication authentication) {
+    public ResponseEntity<?> getUserProfile(Authentication authentication) {
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
-        return new ResponseEntity<>(userProfile, HttpStatus.OK);
+        JSONObject jsonResponse = new JSONObject();
+        if (userProfile != null) {
+            jsonResponse.put("status", 200);
+            JSONObject data = new JSONObject();
+            data.put("first_name", userProfile.getFirst_name());
+            data.put("last_name", userProfile.getLast_name());
+            data.put("email", userProfile.getEmail());
+            data.put("phone_number", userProfile.getPhone_number());
+            jsonResponse.put("data", data);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        }
+        else {
+            jsonResponse.put("status", 204);
+            jsonResponse.put("message", "Balance for user " + authentication.getName() + "is empty");
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NO_CONTENT);
+        }
+    }
+    @GetMapping(value = "/get-user-balance")
+    public ResponseEntity<?> getUserBalance(Authentication authentication) {
+        UserBalance userBalance = userBalanceMapper.findByUserId(userMapper.findByPhoneNumber(authentication.getName()).getId());
+        JSONObject jsonResponse = new JSONObject();
+        if (userBalance != null) {
+            jsonResponse.put("status", 200);
+            jsonResponse.put("data", new JSONObject().put("amount", userBalance.getBalance()));
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        }
+        else {
+            jsonResponse.put("status", 404);
+            jsonResponse.put("message", "Balance for user " + authentication.getName() + " is empty");
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping(value = "/verify-otp")
-    public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otpRequest) {
+    public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otpRequest) throws ParseException {
         JSONObject jsonObject = new JSONObject();
         Otp otp = otpMapper.findByCode(otpRequest.getOtp_code());
         if (otp == null) {
             jsonObject.put("status", 404);
             jsonObject.put("message", "OTP Code not found");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        } else if (!otp.isStatus()) {
+        } else if (!otp.isStatus() || !validation.otpExpiry(otp.getCreated_at())) {
             jsonObject.put("status", 401);
-            jsonObject.put("message", "OTP Code is expired");
+            jsonObject.put("message", "OTP Code has expired");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
         } else {
             User user = userMapper.getById(otp.getUser_id());

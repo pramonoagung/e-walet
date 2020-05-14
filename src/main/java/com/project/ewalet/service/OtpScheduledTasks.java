@@ -2,6 +2,7 @@ package com.project.ewalet.service;
 
 import com.project.ewalet.mapper.OtpMapper;
 import com.project.ewalet.model.Otp;
+import com.project.ewalet.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,8 @@ public class OtpScheduledTasks {
 
     @Autowired
     private OtpMapper otpMapper;
+    @Autowired
+    private Validation validation;
 
     static final long ONE_MINUTE_IN_MILLIS = 60000;//millisecs
 
@@ -26,18 +29,7 @@ public class OtpScheduledTasks {
         List<Otp> otpList = otpMapper.getAllActiveOtp();
 
         for (Otp otp : otpList) {
-            DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
-            Date otpDate = (Date) formatter.parse(otp.getCreated_at());
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(otpDate);
-            long otpDateMilis = cal.getTimeInMillis();
-            Date otpExpiry = new Date(otpDateMilis + (3 * ONE_MINUTE_IN_MILLIS));
-
-            Calendar date = Calendar.getInstance();
-            long t = date.getTimeInMillis();
-            Date actualDate = new Date(t);
-
-            if (actualDate.after(otpExpiry)) {
+            if (!validation.otpExpiry(otp.getCreated_at())) {
                 otp.setStatus(false);
                 otpMapper.update(otp);
             }
