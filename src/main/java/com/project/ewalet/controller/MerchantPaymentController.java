@@ -31,8 +31,8 @@ public class MerchantPaymentController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         }
         else {
-            jsonResponse.put("status", 409);
-            jsonResponse.put("message", "Invalid Token");
+            jsonResponse.put("status", 406);
+            jsonResponse.put("message", "Invalid payment token");
             return new ResponseEntity<>(jsonResponse, HttpStatus.CONFLICT);
         }
     }
