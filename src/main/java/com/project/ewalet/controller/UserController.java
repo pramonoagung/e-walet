@@ -157,7 +157,8 @@ public class UserController {
         JSONObject jsonResponse = new JSONObject();
         if (userBalance != null) {
             jsonResponse.put("status", 200);
-            jsonResponse.put("data", new JSONObject().put("amount", userBalance.getBalance()));
+            jsonResponse.put("amount", userBalance.getBalance());
+            System.out.println(jsonResponse);
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         }
         else {
