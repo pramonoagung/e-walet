@@ -39,7 +39,6 @@ public class OtpController {
     public ResponseEntity<?> resendOtp(@RequestBody ResendOtpRequest resendOtpRequest) {
         JSONObject jsonObject = new JSONObject();
         if (validation.email(resendOtpRequest.getEmail()) && validation.phoneNumber(resendOtpRequest.getPhone_number())) {
-
             String otpCode = utility.otpCode();
             User user = userMapper.findByEmail(resendOtpRequest.getEmail());
             Otp otp = new Otp();
