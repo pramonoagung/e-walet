@@ -130,7 +130,7 @@ public class UserController {
         JSONObject jsonResponse = new JSONObject();
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
         if (userProfile != null) {
-            jsonResponse.put("status", 204);
+            jsonResponse.put("status", 200);
             JSONObject data = new JSONObject();
             data.put("first_name", userProfile.getFirst_name());
             data.put("last_name", userProfile.getLast_name());
@@ -150,7 +150,7 @@ public class UserController {
         JSONObject jsonResponse = new JSONObject();
         UserBalance userBalance = userBalanceMapper.findByUserId(userMapper.findByPhoneNumber(authentication.getName()).getId());
         if (userBalance != null) {
-            jsonResponse.put("status", 204);
+            jsonResponse.put("status", 200);
             jsonResponse.put("data", new JSONObject().put("amount", userBalance.getBalance()));
             return new ResponseEntity(jsonResponse, HttpStatus.OK);
         }
