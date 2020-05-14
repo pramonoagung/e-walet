@@ -20,12 +20,12 @@ public class MerchantPaymentController {
     @Autowired
     UserMapper userMapper;
 
-    @GetMapping(value = "confirm-merchant-topup/{token}")
-    public ResponseEntity confirmMerchantTopUp(@PathVariable String token) {
-        TopUpHistory lastTopUpHistory = topUpHistoryMapper.getLastHistoryByToken(token);
+    @GetMapping(value = "confirm-merchant-topup/{token}/{invoice_id}")
+    public ResponseEntity confirmMerchantTopUp(@PathVariable String token, @PathVariable long invoice_id) {
+        TopUpHistory topUpHistory = topUpHistoryMapper.getTopUpHistoryById(invoice_id);
         JSONObject jsonResponse = new JSONObject();
-        if (lastTopUpHistory == null){
-            topUpHistoryMapper.updateStatus(1, lastTopUpHistory.getUser_id());
+        if (topUpHistory != null){
+            topUpHistoryMapper.updateStatusById(1, topUpHistory.getUser_id());
             jsonResponse.put("status", 200);
             jsonResponse.put("message", "Success");
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);

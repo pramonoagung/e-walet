@@ -111,7 +111,7 @@ public class UserController {
         sendEmail(savedUser.getEmail(), otpCode);
 
         if (savedUser != null) {
-            jsonObject.put("status", 200);
+            jsonObject.put("status", 201);
             jsonObject.put("message", "created");
             return new ResponseEntity<>(jsonObject, HttpStatus.OK);
         } else {
