@@ -84,12 +84,12 @@ public class TopUpController {
             public void run() {
                 System.out.println("Task performed on: " + new Date() + "n"
                         + "Thread's name: " + Thread.currentThread().getName());
-                topUpHistoryMapper.updateStatusById(2 ,id);
+                topUpHistoryMapper.updateStatusById(2 ,Long.parseLong(Thread.currentThread().getName()));
             }
         };
-        Timer timer = new Timer("Expiring Payment");
+        Timer timer = new Timer(""+id);
         long hourInMillis = 1000 * 60 * 60;
-        long delay = hourInMillis/12;
+        long delay = 30000L;
         timer.schedule(task, delay);
         return "expiration task has been initialize";
     }

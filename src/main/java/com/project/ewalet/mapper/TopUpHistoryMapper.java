@@ -28,7 +28,7 @@ public interface TopUpHistoryMapper {
     void updateStatus(int status, long user_id);
 
     @Update(updateStatusById)
-    void updateStatusById(int status, long user_id);
+    void updateStatusById(int status, long id);
 
     @Select(getTopupHistoryById)
     @Results(value = {
