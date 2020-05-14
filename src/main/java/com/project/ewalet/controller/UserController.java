@@ -149,15 +149,18 @@ public class UserController {
     public ResponseEntity<?> getUserBalance(Authentication authentication) {
         JSONObject jsonResponse = new JSONObject();
         UserBalance userBalance = userBalanceMapper.findByUserId(userMapper.findByPhoneNumber(authentication.getName()).getId());
+        System.out.println(userBalance);
         if (userBalance != null) {
+            System.out.println(jsonResponse+"respons if");
             jsonResponse.put("status", 200);
             jsonResponse.put("data", new JSONObject().put("amount", userBalance.getBalance()));
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         }
         else {
-            jsonResponse.put("status", 204);
-            jsonResponse.put("message", "Balance for user " + authentication.getName() + "is empty");
-            return new ResponseEntity<>(jsonResponse, HttpStatus.NO_CONTENT);
+            System.out.println(jsonResponse+"respons else");
+            jsonResponse.put("status", 404);
+            jsonResponse.put("message", "Balance for user " + authentication.getName() + " is empty");
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_FOUND);
         }
     }
 
