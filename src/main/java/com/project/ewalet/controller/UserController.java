@@ -144,8 +144,8 @@ public class UserController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         }
         else {
-            jsonResponse.put("status", 204);
-            jsonResponse.put("message", "Balance for user " + authentication.getName() + "is empty");
+            jsonResponse.put("status", 400);
+            jsonResponse.put("message", "User " + authentication.getName() + " has not been registered");
             return new ResponseEntity<>(jsonResponse, HttpStatus.NO_CONTENT);
         }
     }
@@ -159,9 +159,9 @@ public class UserController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         }
         else {
-            jsonResponse.put("status", 404);
+            jsonResponse.put("status", 200);
             jsonResponse.put("data", new JSONObject().put("amount", 0));
-            return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         }
     }
 
