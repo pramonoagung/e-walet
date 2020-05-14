@@ -152,12 +152,12 @@ public class UserController {
         if (userBalance != null) {
             jsonResponse.put("status", 204);
             jsonResponse.put("data", new JSONObject().put("amount", userBalance.getBalance()));
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity(jsonResponse, HttpStatus.OK);
         }
         else {
             jsonResponse.put("status", 204);
             jsonResponse.put("message", "Balance for user " + authentication.getName() + "is empty");
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(jsonResponse, HttpStatus.NO_CONTENT);
         }
     }
 
