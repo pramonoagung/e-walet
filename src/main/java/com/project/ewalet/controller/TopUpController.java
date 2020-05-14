@@ -84,7 +84,9 @@ public class TopUpController {
             public void run() {
                 System.out.println("Task performed on: " + new Date() + "n"
                         + "Thread's name: " + Thread.currentThread().getName());
-                topUpHistoryMapper.updateStatusById(2 ,Long.parseLong(Thread.currentThread().getName()));
+                if (topUpHistoryMapper.getTopUpHistoryById(Long.parseLong(Thread.currentThread().getName())).getStatus() != 1){
+                    topUpHistoryMapper.updateStatusById(2 ,Long.parseLong(Thread.currentThread().getName()));
+                }
             }
         };
         Timer timer = new Timer(""+id);
