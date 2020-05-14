@@ -50,6 +50,8 @@ public class OtpController {
 
             sendSms(resendOtpRequest.getPhone_number(), otpCode);
             sendEmail(resendOtpRequest.getEmail(), otpCode);
+            jsonObject.put("status", 200);
+            jsonObject.put("message", "OTP has sent");
             return new ResponseEntity<>(jsonObject, HttpStatus.OK);
         } else {
             jsonObject.put("status", 406);
