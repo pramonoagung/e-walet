@@ -20,8 +20,8 @@ public interface TopUpHistoryMapper {
     final String getLastHistoryByToken = "SELECT * FROM TOPUP_HISTORY WHERE TOKEN = #{token} ORDER BY ID DESC LIMIT 1";
     final String getTopupHistoryByUserId = "SELECT * FROM TOPUP_HISTORY WHERE USER_ID = #{userId}";
     final String getTopupHistoryById = "SELECT * FROM TOPUP_HISTORY WHERE ID = #{id}";
-    final String getTopupHistoryWithFileByUserId = "SELECT * FROM TOPUP_HISTORY AS T JOIN FILES AS F" +
-            " ON T.FILE_UPLOAD_ID = F.ID WHERE T.USER_ID = #{user_id}";
+    final String getTopupHistoryWithFileByUserId = "SELECT T.*, F.PATH, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS T JOIN FILES AS F" +
+            " ON T.FILE_UPLOAD_ID = F.ID JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id}";
 
     @Select(getTopupHistoryWithFileByUserId)
     @Results(value = {
@@ -29,7 +29,8 @@ public interface TopUpHistoryMapper {
             @Result(property = "user_id", column = "USER_ID"),
             @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
             @Result(property = "token", column = "TOKEN"),
-            @Result(property = "payment_method", column = "PAYMENT_METHOD"),
+            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
+            @Result(property = "name", column = "NAME"),
             @Result(property = "status", column = "STATUS"),
             @Result(property = "path", column = "PATH"),
             @Result(property = "created_at", column = "CREATED_AT")
