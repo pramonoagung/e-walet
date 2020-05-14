@@ -23,7 +23,7 @@ public class BalanceCatalogController {
     public ResponseEntity getBalanceCatalog() {
         ArrayList<BalanceCatalog> balanceCatalogArrayList = balanceCatalogMapper.getAll();
         JSONObject jsonResponse = new JSONObject();
-        if (balanceCatalogArrayList != null) {
+        if (!balanceCatalogArrayList.isEmpty()) {
             jsonResponse.put("status", 200);
             jsonResponse.put("data", balanceCatalogArrayList);
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);

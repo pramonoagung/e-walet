@@ -25,7 +25,7 @@ public class PaymentMethodController {
 
         ArrayList<PaymentMethod> paymentMethodArrayList = paymentMethodMapper.getAll();
         JSONObject jsonResponse = new JSONObject();
-        if (paymentMethodArrayList != null) {
+        if (!paymentMethodArrayList.isEmpty()) {
             jsonResponse.put("status", 200);
             jsonResponse.put("data", paymentMethodArrayList);
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
