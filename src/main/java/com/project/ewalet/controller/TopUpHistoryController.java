@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -31,10 +32,14 @@ public class TopUpHistoryController {
         JSONObject jsonResponse = new JSONObject();
 
         User user = userMapper.findByPhoneNumber(authentication.getName());
-        ArrayList<TopUpHistoryPayload> userTopUpHistory = topUpHistoryMapper.getTopupHistoryWithFileByUserId(user.getId());
-        System.out.println(userTopUpHistory);
+        List<TopUpHistoryPayload> userTopUpHistoryBank = topUpHistoryMapper.getTopupHistoryBanksByUserId(user.getId());
+        List<TopUpHistoryPayload> userTopUpHistoryMerchant = topUpHistoryMapper.getTopupHistoryMerchantsByUserId(user.getId());
+        ArrayList userTopUpHistoryResponse = new ArrayList<>();
+        userTopUpHistoryResponse.add(userTopUpHistoryBank);
+        userTopUpHistoryResponse.add(userTopUpHistoryMerchant);
+        System.out.println(userTopUpHistoryResponse);
         jsonResponse.put("status", 200);
-        jsonResponse.put("data", userTopUpHistory);
+        jsonResponse.put("data", userTopUpHistoryResponse);
         jsonResponse.put("message", "success");
 
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);

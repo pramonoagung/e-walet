@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Mapper
@@ -23,10 +24,11 @@ public interface TopUpHistoryMapper {
     final String getLastHistoryByToken = "SELECT * FROM TOPUP_HISTORY WHERE TOKEN = #{token} ORDER BY ID DESC LIMIT 1";
     final String getTopupHistoryByUserId = "SELECT * FROM TOPUP_HISTORY WHERE USER_ID = #{userId}";
     final String getTopupHistoryById = "SELECT * FROM TOPUP_HISTORY WHERE ID = #{id}";
-    final String getTopupHistoryWithFileByUserId = "SELECT T.*, F.PATH, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS T JOIN FILES AS F" +
+    final String getTopupHistoryBanksByUserId = "SELECT T.*, F.PATH, F.FILE_NAME, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS T JOIN FILES AS F" +
             " ON T.FILE_UPLOAD_ID = F.ID JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id}";
+    final String getTopupHistoryMerchantsByUserId = "SELECT T.*, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS T JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id} AND P.PAYMENT_TYPE = 2";
 
-    @Select(getTopupHistoryWithFileByUserId)
+    @Select(getTopupHistoryMerchantsByUserId)
     @Results(value = {
             @Result(property = "id", column = "ID"),
             @Result(property = "user_id", column = "USER_ID"),
@@ -38,7 +40,21 @@ public interface TopUpHistoryMapper {
             @Result(property = "path", column = "PATH"),
             @Result(property = "created_at", column = "CREATED_AT")
     })
-    ArrayList<TopUpHistoryPayload> getTopupHistoryWithFileByUserId(long user_id);
+    List<TopUpHistoryPayload> getTopupHistoryMerchantsByUserId(long user_id);
+
+    @Select(getTopupHistoryBanksByUserId)
+    @Results(value = {
+            @Result(property = "id", column = "ID"),
+            @Result(property = "user_id", column = "USER_ID"),
+            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
+            @Result(property = "token", column = "TOKEN"),
+            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
+            @Result(property = "name", column = "NAME"),
+            @Result(property = "status", column = "STATUS"),
+            @Result(property = "path", column = "PATH"),
+            @Result(property = "created_at", column = "CREATED_AT")
+    })
+    List<TopUpHistoryPayload> getTopupHistoryBanksByUserId(long user_id);
 
     @Insert(insert)
     @Options(useGeneratedKeys = true, keyProperty = "id")
