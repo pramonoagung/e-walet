@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "file",indexes = {@Index(columnList = "id"), @Index(columnList = "user_id")})
+@Table(name = "files",indexes = {@Index(columnList = "id"), @Index(columnList = "user_id")})
 @Data
 public class FileUpload {
     @Id
@@ -17,4 +17,6 @@ public class FileUpload {
     private int file_type;
     @Column(length = 100)
     private String path;
+    @Column(length = 100)
+    private String file_name;
 }
