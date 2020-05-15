@@ -108,6 +108,8 @@ public class FileUploadController {
                 userBalanceMapper.insert(userBalance);
                 balance = currentBalance;
             }
+//            topUpHistory.setFile_upload_id();
+//            topUpHistoryMapper.updateStatus();
         }
         return balance;
     }

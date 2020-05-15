@@ -46,35 +46,49 @@ public class TopUpController {
         BalanceCatalog balanceCatalog = balanceCatalogMapper.findByCode(topUpRequest.getCode());
         PaymentMethod paymentMethod = paymentMethodMapper.getById(topUpRequest.getPayment_method_id());
         User user = userMapper.findByPhoneNumber(topUpRequest.getPhone_number());
+        if (balanceCatalog == null) {
+            jsonObject.put("status", 404);
+            jsonObject.put("message", "balance catalog not found");
+            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+        } else if (paymentMethod == null) {
+            jsonObject.put("status", 404);
+            jsonObject.put("message", "payment method not found");
+            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+        } else if (user == null) {
+            jsonObject.put("status", 404);
+            jsonObject.put("message", "User not found");
+            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+        } else {
 
-        //record to db
-        TopUpHistory topUpHistory = new TopUpHistory();
-        topUpHistory.setUser_id(user.getId());
-        topUpHistory.setTopup_balance(balanceCatalog.getBalance());
-        topUpHistory.setToken(8000 + user.getPhone_number());
-        topUpHistory.setPayment_method(paymentMethod.getId());
-        topUpHistory.setStatus(0);
-        topUpHistory.setCreated_at(utility.getCurrentTime());
-        topUpHistoryMapper.insert(topUpHistory);
+            //record to db
+            TopUpHistory topUpHistory = new TopUpHistory();
+            topUpHistory.setUser_id(user.getId());
+            topUpHistory.setTopup_balance(balanceCatalog.getBalance());
+            topUpHistory.setToken(8000 + user.getPhone_number());
+            topUpHistory.setPayment_method(paymentMethod.getId());
+            topUpHistory.setStatus(0);
+            topUpHistory.setCreated_at(utility.getCurrentTime());
+            topUpHistoryMapper.insert(topUpHistory);
 
-        TopUpHistory topUpHistoryLatest = topUpHistoryMapper.findLatestRecordByDateTokenAndUserId(user.getId(),
-                8000 + user.getPhone_number());
+            TopUpHistory topUpHistoryLatest = topUpHistoryMapper.findLatestRecordByDateTokenAndUserId(user.getId(),
+                    8000 + user.getPhone_number());
 
-        System.out.println(paymentExpirationTask(topUpHistoryLatest.getId()));
+            System.out.println(paymentExpirationTask(topUpHistoryLatest.getId()));
 
-        data.put("topup_balance", balanceCatalog.getBalance());
-        data.put("payment_type", paymentMethod.getPayment_type());
-        data.put("name", paymentMethod.getName());
-        data.put("invoice_id", topUpHistoryLatest.getId());
-        data.put("token", topUpHistoryLatest.getToken());
-        data.put("status", topUpHistoryLatest.getStatus());
-        data.put("created_at", topUpHistoryLatest.getCreated_at());
+            data.put("topup_balance", balanceCatalog.getBalance());
+            data.put("payment_type", paymentMethod.getPayment_type());
+            data.put("name", paymentMethod.getName());
+            data.put("invoice_id", topUpHistoryLatest.getId());
+            data.put("token", topUpHistoryLatest.getToken());
+            data.put("status", topUpHistoryLatest.getStatus());
+            data.put("created_at", topUpHistoryLatest.getCreated_at());
 
-        jsonObject.put("status", 200);
-        jsonObject.put("data", data);
-        jsonObject.put("message", "success");
+            jsonObject.put("status", 200);
+            jsonObject.put("data", data);
+            jsonObject.put("message", "success");
 
-        return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+        }
     }
 
     public String paymentExpirationTask(long id) {
@@ -84,14 +98,14 @@ public class TopUpController {
             public void run() {
                 System.out.println("Task performed on: " + new Date() + "n"
                         + "Thread's name: " + Thread.currentThread().getName());
-                if (topUpHistoryMapper.getTopUpHistoryById(Long.parseLong(Thread.currentThread().getName())).getStatus() != 1){
-                    topUpHistoryMapper.updateStatusById(2 ,Long.parseLong(Thread.currentThread().getName()));
+                if (topUpHistoryMapper.getTopUpHistoryById(Long.parseLong(Thread.currentThread().getName())).getStatus() != 1) {
+                    topUpHistoryMapper.updateStatusById(2, Long.parseLong(Thread.currentThread().getName()));
                 }
             }
         };
-        Timer timer = new Timer(""+id);
+        Timer timer = new Timer("" + id);
         long hourInMillis = 1000 * 60 * 60;
-        long delay = hourInMillis/12;
+        long delay = hourInMillis / 12;
         timer.schedule(task, delay);
         return "expiration task has been initialize";
     }
