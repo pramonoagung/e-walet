@@ -49,11 +49,11 @@ public class TopUpController {
         if (balanceCatalog == null) {
             jsonObject.put("status", 404);
             jsonObject.put("message", "balance catalog not found");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
         } else if (paymentMethod == null) {
             jsonObject.put("status", 404);
             jsonObject.put("message", "payment method not found");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
         } else if (user == null) {
             jsonObject.put("status", 404);
             jsonObject.put("message", "User not found");
