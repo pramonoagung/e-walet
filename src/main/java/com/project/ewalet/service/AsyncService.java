@@ -13,23 +13,23 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 public class AsyncService {
-    @Autowired
-    private RestTemplate restTemplate;
+//    @Autowired
+//    private RestTemplate restTemplate;
 
     @Autowired
     private EmailService emailService;
 
     @Autowired
     private SmsService smsService;
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
-    public AsyncService() {
-        restTemplate = new RestTemplate();
-    }
+//
+//    @Bean
+//    public RestTemplate restTemplate() {
+//        return new RestTemplate();
+//    }
+//
+//    public AsyncService() {
+//        restTemplate = new RestTemplate();
+//    }
 
     @Async("asyncExecutor")
     public CompletableFuture<SmsGatewayPayload> sendSms(String phoneNumber, String otpCode) {
