@@ -20,6 +20,7 @@ public class BankApiController {
     @GetMapping("/api/confirm-bank/{token}")
     public ResponseEntity<?> cofirmTopUp(@PathVariable String token) {
         JSONObject jsonObject = new JSONObject();
+        System.out.println("BANK CONFIRMED");
         CompletableFuture<JSONObject> response = service.confirmPayment(token);
         CompletableFuture.allOf(response).isDone();
         return new ResponseEntity<>(response, HttpStatus.OK);

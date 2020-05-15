@@ -37,10 +37,17 @@ public class TopUpHistoryController {
         List<TopUpHistoryPayload> topUpHistoryPayloadList = new ArrayList<>();
         topUpHistoryPayloadList.addAll(userTopUpHistoryBanks);
         topUpHistoryPayloadList.addAll(userTopUpHistoryMerchant);
-        jsonResponse.put("status", 200);
-        jsonResponse.put("data", topUpHistoryPayloadList);
-        jsonResponse.put("message", "success");
 
-        return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        if (topUpHistoryPayloadList != null) {
+            jsonResponse.put("status", 200);
+            jsonResponse.put("data", topUpHistoryPayloadList);
+            jsonResponse.put("message", "Success");
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        }
+        else {
+            jsonResponse.put("status", 404);
+            jsonResponse.put("message", "No transaction found");
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_FOUND);
+        }
     }
 }
