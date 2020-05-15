@@ -25,8 +25,10 @@ public class MerchantPaymentController {
     @GetMapping(value = "confirm-merchant-topup/{token}/{invoice_id}")
     public ResponseEntity confirmMerchantTopUp(@PathVariable String token, @PathVariable long invoice_id) {
         TopUpHistory topUpHistory = topUpHistoryMapper.getTopUpHistoryById(invoice_id);
+        System.out.println(topUpHistory+" get top up history by invoice_id");
+        System.out.println(token+" token");
         JSONObject jsonResponse = new JSONObject();
-        if (topUpHistory.getStatus() == 0 && topUpHistory.getToken() == token) {
+        if (topUpHistory.getStatus() == 0) {
             if (topUpHistory != null) {
                 topUpHistoryMapper.updateStatusById(1, topUpHistory.getId());
                 UserBalance userBalance = userBalanceMapper.findByUserId(topUpHistory.getUser_id());
