@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Mapper
@@ -39,7 +40,7 @@ public interface TopUpHistoryMapper {
             @Result(property = "path", column = "PATH"),
             @Result(property = "created_at", column = "CREATED_AT")
     })
-    ArrayList<TopUpHistoryPayload> getTopupHistoryMerchantsByUserId(long user_id);
+    List<TopUpHistoryPayload> getTopupHistoryMerchantsByUserId(long user_id);
 
     @Select(getTopupHistoryBanksByUserId)
     @Results(value = {
@@ -53,7 +54,7 @@ public interface TopUpHistoryMapper {
             @Result(property = "path", column = "PATH"),
             @Result(property = "created_at", column = "CREATED_AT")
     })
-    ArrayList<TopUpHistoryPayload> getTopupHistoryBanksByUserId(long user_id);
+    List<TopUpHistoryPayload> getTopupHistoryBanksByUserId(long user_id);
 
     @Insert(insert)
     @Options(useGeneratedKeys = true, keyProperty = "id")
