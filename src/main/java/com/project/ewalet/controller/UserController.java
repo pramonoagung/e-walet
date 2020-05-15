@@ -162,7 +162,7 @@ public class UserController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } else {
             jsonResponse.put("status", 200);
-            jsonResponse.put("data", new JSONObject().put("amount", 0));
+            jsonResponse.put("amount", 0);
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         }
     }

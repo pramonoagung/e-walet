@@ -26,7 +26,7 @@ public class MerchantPaymentController {
     public ResponseEntity confirmMerchantTopUp(@PathVariable String token, @PathVariable long invoice_id) {
         TopUpHistory topUpHistory = topUpHistoryMapper.getTopUpHistoryById(invoice_id);
         JSONObject jsonResponse = new JSONObject();
-        if (topUpHistory.getStatus() == 0 && topUpHistory.getToken() == token) {
+        if (topUpHistory.getStatus() == 0 && topUpHistory.getToken().equals(token)) {
             if (topUpHistory != null) {
                 topUpHistoryMapper.updateStatusById(1, topUpHistory.getId());
                 UserBalance userBalance = userBalanceMapper.findByUserId(topUpHistory.getUser_id());
@@ -49,7 +49,7 @@ public class MerchantPaymentController {
         }
         else {
             jsonResponse.put("status", 406);
-            jsonResponse.put("message", "Payment request for payment token : " + token + " not available");
+            jsonResponse.put("message", "Payment request for payment token " + token + " not available");
             return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_ACCEPTABLE);
         }
     }
