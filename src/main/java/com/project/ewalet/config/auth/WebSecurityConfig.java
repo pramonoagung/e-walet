@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        String allowedUrl[] = {"/sign-up", "/login", "/confirm-merchant-topup/{token}",
+        String allowedUrl[] = {"/sign-up", "/login", "/confirm-merchant-topup/{token}/{invoice_id}",
                 "/confirm-bank/{token}", "/api/confirm-bank/{token}", "/file/{path_id}", "/resend-otp", "/verify-otp"};
         // We don't need CSRF for this example
         httpSecurity.csrf().disable()
