@@ -104,7 +104,7 @@ public class UserController {
         otp.setUser_id(savedUser.getId());
         otp.setCode(otpCode);
         otp.setStatus(true);
-        otp.setCreated_at(utility.getCurrentTime());
+        otp.setCreated_at(utility.getCurrentTimeOtp());
         otpMapper.save(otp);
 
         sendSms(savedUser.getPhone_number(), otpCode);
