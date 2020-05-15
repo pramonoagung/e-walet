@@ -13,10 +13,13 @@ public interface TopUpHistoryMapper {
 
     final String insert = "INSERT INTO topup_history (user_id, topup_balance, token, payment_method, status, created_at) " +
             "VALUES (#{user_id}, #{topup_balance}, #{token}, #{payment_method}, #{status}, #{created_at})";
+    final String update = "UPDATE topup_history SET created_at = #{created_at}, payment_method= #{payment_method}," +
+            "status = #{status}, token =#{token}, topup_balance = #{topup_balance}, user_id = #{user_id}," +
+            "file_upload_id = #{file_upload_id} WHERE user_id = #{user_id}";
     final String updateStatus = "UPDATE topup_history SET status = #{status} WHERE user_id = #{user_id}";
     final String updateStatusById = "UPDATE TOPUP_HISTORY SET STATUS = #{status} WHERE ID = #{id}";
     final String getLatestRecord = "SELECT * from topup_history where user_id = #{user_id} and token = #{token}" +
-            " ORDER BY created_at DESC limit 1";
+            " and status = 0 and payment_method = 1 ORDER BY created_at DESC limit 1";
     final String getLastHistoryByToken = "SELECT * FROM TOPUP_HISTORY WHERE TOKEN = #{token} ORDER BY ID DESC LIMIT 1";
     final String getTopupHistoryByUserId = "SELECT * FROM TOPUP_HISTORY WHERE USER_ID = #{userId}";
     final String getTopupHistoryById = "SELECT * FROM TOPUP_HISTORY WHERE ID = #{id}";
@@ -56,6 +59,9 @@ public interface TopUpHistoryMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(TopUpHistory topUpHistory);
 
+    @Update(update)
+    void update(TopUpHistory topUpHistory);
+
     @Update(updateStatus)
     void updateStatus(int status, long user_id);
 
@@ -94,9 +100,10 @@ public interface TopUpHistoryMapper {
             @Result(property = "token", column = "token"),
             @Result(property = "topup_balance", column = "topup_balance"),
             @Result(property = "user_id", column = "user_id"),
-            @Result(property = "created_at", column = "created_at")
+            @Result(property = "created_at", column = "created_at"),
+            @Result(property = "file_upload_id", column = "file_upload_id")
     })
-    TopUpHistory findLatestRecordByDateAndUserId(long user_id, String token);
+    TopUpHistory findLatestRecordByDateTokenAndUserId(long user_id, String token);
 
     @Select(getLastHistoryByToken)
     @Results(value = {

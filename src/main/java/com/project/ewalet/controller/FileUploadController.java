@@ -1,11 +1,14 @@
 package com.project.ewalet.controller;
 
 import com.project.ewalet.mapper.FileUploadMapper;
+import com.project.ewalet.mapper.TopUpHistoryMapper;
+import com.project.ewalet.mapper.UserBalanceMapper;
 import com.project.ewalet.mapper.UserMapper;
 import com.project.ewalet.model.FileUpload;
+import com.project.ewalet.model.TopUpHistory;
 import com.project.ewalet.model.User;
+import com.project.ewalet.model.UserBalance;
 import com.project.ewalet.service.FileStorageService;
-import com.project.ewalet.utils.Utility;
 import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +28,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Controller
 public class FileUploadController {
 
-    @Autowired
-    private Utility utility;
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -41,8 +39,8 @@ public class FileUploadController {
     @Autowired
     private FileStorageService fileStorageService;
 
-    @PostMapping("/upload-transfer-receipt")
-    public ResponseEntity<?> uploadFile(@RequestParam("transfer_receipt") MultipartFile file, Authentication authentication) {
+    @PostMapping("/upload-transfer-receipt/{token}")
+    public ResponseEntity<?> uploadFile(@RequestParam("transfer_receipt") MultipartFile file, @RequestParam("token") String token, Authentication authentication) {
         JSONObject jsonObject = new JSONObject();
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
         if (file.isEmpty()) {
@@ -79,10 +77,39 @@ public class FileUploadController {
 
             jsonObject.put("status", 201);
             jsonObject.put("message", "File Uploaded sucessfully");
+            long balance = updateTopUp(userProfile.getId(), token);
+            jsonObject.put("current_balance", balance);
         }
 //        return new UploadFileResponse(fileName, fileDownloadUri,
 //                file.getContentType(), file.getSize());
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+    }
+
+    @Autowired
+    private TopUpHistoryMapper topUpHistoryMapper;
+    @Autowired
+    UserBalanceMapper userBalanceMapper;
+
+    private long updateTopUp(long user_id, String token) {
+        long balance = 0;
+        TopUpHistory topUpHistory = topUpHistoryMapper.findLatestRecordByDateTokenAndUserId(user_id, token);
+        if (topUpHistory != null) {
+            UserBalance userBalance = userBalanceMapper.findByUserId(topUpHistory.getUser_id());
+            if (userBalance == null) {
+                balance = topUpHistory.getTopup_balance();
+                UserBalance newUserBalance = new UserBalance();
+                newUserBalance.setUser_id(topUpHistory.getUser_id());
+                newUserBalance.setBalance(topUpHistory.getTopup_balance());
+                userBalanceMapper.insert(newUserBalance);
+            } else {
+                long actualBalance = userBalance.getBalance();
+                long currentBalance = topUpHistory.getTopup_balance() + actualBalance;
+                userBalance.setBalance(currentBalance);
+                userBalanceMapper.insert(userBalance);
+                balance = currentBalance;
+            }
+        }
+        return balance;
     }
 
     @GetMapping("/downloadFile/{fileName:.+}")
