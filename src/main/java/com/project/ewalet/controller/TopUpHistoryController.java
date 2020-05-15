@@ -32,18 +32,10 @@ public class TopUpHistoryController {
         JSONObject jsonResponse = new JSONObject();
 
         User user = userMapper.findByPhoneNumber(authentication.getName());
-        List<TopUpHistoryPayload> userTopUpHistoryBank = topUpHistoryMapper.getTopupHistoryBanksByUserId(user.getId());
+        List<TopUpHistoryPayload> userTopUpHistory = topUpHistoryMapper.getTopupHistoryBanksByUserId(user.getId());
         List<TopUpHistoryPayload> userTopUpHistoryMerchant = topUpHistoryMapper.getTopupHistoryMerchantsByUserId(user.getId());
-        List<TopUpHistoryPayload> userTopUpHistoryResponse = null;
-        System.out.println(userTopUpHistoryBank);
-        System.out.println(userTopUpHistoryMerchant);
-        userTopUpHistoryBank.addAll(userTopUpHistoryMerchant);
-        System.out.println(userTopUpHistoryBank);
-//        System.out.println(userTopUpHistoryResponse.addAll(userTopUpHistoryBank));
-//        System.out.println(userTopUpHistoryResponse.addAll(userTopUpHistoryMerchant));
-//        System.out.println(userTopUpHistoryResponse);
         jsonResponse.put("status", 200);
-        jsonResponse.put("data", userTopUpHistoryBank);
+        jsonResponse.put("data", userTopUpHistory);
         jsonResponse.put("message", "success");
 
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
