@@ -40,8 +40,10 @@ public class FileUploadController {
     private FileStorageService fileStorageService;
 
     @PostMapping("/upload-transfer-receipt/{token}")
-    public ResponseEntity<?> uploadFile(@RequestParam("transfer_receipt") MultipartFile file, @RequestParam("token") String token, Authentication authentication) {
+    public ResponseEntity<?> uploadFile(@RequestParam("transfer_receipt") MultipartFile file, @PathVariable String token,
+                                        Authentication authentication) {
         JSONObject jsonObject = new JSONObject();
+        System.out.println("isi fileId " + authentication.getName());
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
         if (file.isEmpty()) {
             jsonObject.put("status", 404);
@@ -73,11 +75,11 @@ public class FileUploadController {
             fileUpload.setPath(fileDownloadUri);
             fileUpload.setFile_name(fileName);
             // save to db
-            fileUploadMapper.save(fileUpload);
+            int fileId = fileUploadMapper.save(fileUpload);
 
             jsonObject.put("status", 201);
             jsonObject.put("message", "File Uploaded sucessfully");
-            long balance = updateTopUp(userProfile.getId(), token);
+            long balance = updateTopUp(userProfile.getId(), token, fileId);
             jsonObject.put("current_balance", balance);
         }
 //        return new UploadFileResponse(fileName, fileDownloadUri,
@@ -90,7 +92,7 @@ public class FileUploadController {
     @Autowired
     UserBalanceMapper userBalanceMapper;
 
-    private long updateTopUp(long user_id, String token) {
+    private long updateTopUp(long user_id, String token, int fileId) {
         long balance = 0;
         TopUpHistory topUpHistory = topUpHistoryMapper.findLatestRecordByDateTokenAndUserId(user_id, token);
         if (topUpHistory != null) {
@@ -108,8 +110,9 @@ public class FileUploadController {
                 userBalanceMapper.insert(userBalance);
                 balance = currentBalance;
             }
-//            topUpHistory.setFile_upload_id();
-//            topUpHistoryMapper.updateStatus();
+            topUpHistory.setFile_upload_id(fileId);
+            topUpHistory.setStatus(1);
+            topUpHistoryMapper.update(topUpHistory);
         }
         return balance;
     }

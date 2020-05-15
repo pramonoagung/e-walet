@@ -14,7 +14,7 @@ public interface FileUploadMapper {
 
     @Insert(insert)
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    void save(FileUpload fileUpload);
+    int save(FileUpload fileUpload);
 
     @Select(findById)
     @Results(value = {
@@ -35,4 +35,5 @@ public interface FileUploadMapper {
             @Result(property = "file_name", column = "file_name")
     })
     FileUpload findByPath(String path);
+
 }
