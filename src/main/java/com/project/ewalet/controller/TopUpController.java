@@ -57,7 +57,7 @@ public class TopUpController {
         } else if (user == null) {
             jsonObject.put("status", 404);
             jsonObject.put("message", "User not found");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
         } else {
 
             //record to db
