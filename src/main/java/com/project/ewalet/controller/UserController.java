@@ -142,13 +142,13 @@ public class UserController {
             data.put("phone_number", userProfile.getPhone_number());
             jsonResponse.put("data", data);
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
-        }
-        else {
+        } else {
             jsonResponse.put("status", 400);
             jsonResponse.put("message", "User " + authentication.getName() + " has not been registered");
             return new ResponseEntity<>(jsonResponse, HttpStatus.NO_CONTENT);
         }
     }
+
     @GetMapping(value = "/get-user-balance")
     public ResponseEntity<?> getUserBalance(Authentication authentication) {
         long userId = userMapper.findByPhoneNumber(authentication.getName()).getId();
@@ -160,8 +160,7 @@ public class UserController {
             jsonResponse.put("amount", userBalance.getBalance());
             System.out.println(jsonResponse);
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
-        }
-        else {
+        } else {
             jsonResponse.put("status", 200);
             jsonResponse.put("data", new JSONObject().put("amount", 0));
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
@@ -182,13 +181,19 @@ public class UserController {
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
         } else {
             User user = userMapper.getById(otp.getUser_id());
-            user.setStatus(1);
-            userMapper.update(user);
-            otp.setStatus(false);
-            otpMapper.update(otp);
-            jsonObject.put("status", 200);
-            jsonObject.put("message", "Verified");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+            if (user.getPhone_number().equalsIgnoreCase(otpRequest.getPhone_number())) {
+                user.setStatus(1);
+                userMapper.update(user);
+                otp.setStatus(false);
+                otpMapper.update(otp);
+                jsonObject.put("status", 200);
+                jsonObject.put("message", "Verified");
+                return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+            } else {
+                jsonObject.put("status", 404);
+                jsonObject.put("message", "Phone number not found");
+                return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
+            }
         }
     }
 
