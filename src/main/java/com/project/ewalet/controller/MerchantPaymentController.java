@@ -25,28 +25,32 @@ public class MerchantPaymentController {
     @GetMapping(value = "confirm-merchant-topup/{token}/{invoice_id}")
     public ResponseEntity confirmMerchantTopUp(@PathVariable String token, @PathVariable long invoice_id) {
         TopUpHistory topUpHistory = topUpHistoryMapper.getTopUpHistoryById(invoice_id);
-
         JSONObject jsonResponse = new JSONObject();
-        if (topUpHistory != null){
-            topUpHistoryMapper.updateStatusById(1, topUpHistory.getId());
-            UserBalance userBalance = userBalanceMapper.findByUserId(topUpHistory.getUser_id());
-            if (userBalance != null) {
-                userBalanceMapper.updateUserBalance(topUpHistory.getTopup_balance() + userBalance.getBalance(), topUpHistory.getUser_id());
+        if (topUpHistory.getStatus() == 0 && topUpHistory.getToken() == token) {
+            if (topUpHistory != null) {
+                topUpHistoryMapper.updateStatusById(1, topUpHistory.getId());
+                UserBalance userBalance = userBalanceMapper.findByUserId(topUpHistory.getUser_id());
+                if (userBalance != null) {
+                    userBalanceMapper.updateUserBalance(topUpHistory.getTopup_balance() + userBalance.getBalance(), topUpHistory.getUser_id());
+                } else {
+                    UserBalance newUserBalance = new UserBalance();
+                    newUserBalance.setUser_id(topUpHistory.getUser_id());
+                    newUserBalance.setBalance(topUpHistory.getTopup_balance());
+                    userBalanceMapper.insert(newUserBalance);
+                }
+                jsonResponse.put("status", 200);
+                jsonResponse.put("message", "Success");
+                return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+            } else {
+                jsonResponse.put("status", 406);
+                jsonResponse.put("message", "Invalid payment token");
+                return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_ACCEPTABLE);
             }
-            else {
-                UserBalance newUserBalance = new UserBalance();
-                newUserBalance.setUser_id(topUpHistory.getUser_id());
-                newUserBalance.setBalance(topUpHistory.getTopup_balance());
-                userBalanceMapper.insert(newUserBalance);
-            }
-            jsonResponse.put("status", 200);
-            jsonResponse.put("message", "Success");
-            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         }
         else {
             jsonResponse.put("status", 406);
-            jsonResponse.put("message", "Invalid payment token");
-            return new ResponseEntity<>(jsonResponse, HttpStatus.CONFLICT);
+            jsonResponse.put("message", "Payment request for payment token : " + token + " not available");
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_ACCEPTABLE);
         }
     }
 }
