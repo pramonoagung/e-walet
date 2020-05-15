@@ -1,6 +1,7 @@
 package com.project.ewalet.model.payload;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Pattern;
 public class UserPayload {
     @Pattern(regexp = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$", message = "Invalid email format")
     @NotNull(message = "Email must not be null")
+    @Length(max = 50, message = "Max length is 50 character")
     private String email;
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}$", message = "The password must contain at least 1 lowercase, 1 uppercase, 1 numeric, and more than 8 character")
     @NotNull(message = "Password must not be null")
