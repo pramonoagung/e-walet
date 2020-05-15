@@ -57,8 +57,12 @@ public class TopUpController {
         topUpHistory.setCreated_at(utility.getCurrentTime());
         topUpHistoryMapper.insert(topUpHistory);
 
+<<<<<<< HEAD
+        TopUpHistory topUpHistoryLatest = null;
+=======
         TopUpHistory topUpHistoryLatest = topUpHistoryMapper.findLatestRecordByDateTokenAndUserId(user.getId(),
                 8000 + user.getPhone_number());
+>>>>>>> 9a323513a9c171295f74cf2aa4abdb5ed5961541
 
         System.out.println(paymentExpirationTask(topUpHistoryLatest.getId()));
 
