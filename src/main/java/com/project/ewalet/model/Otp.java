@@ -20,6 +20,6 @@ public class Otp {
     private String code;
     @Column(length = 6)
     private boolean status;
-    @Column(length = 25)
+    @Column(length = 50)
     private String created_at;
 }
