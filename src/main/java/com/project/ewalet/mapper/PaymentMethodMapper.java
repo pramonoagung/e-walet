@@ -13,23 +13,23 @@ import java.util.ArrayList;
 @Mapper
 public interface PaymentMethodMapper {
 
-    final String getAll = "SELECT * FROM PAYMENT_METHOD";
-    final String getById = "SELECT * FROM PAYMENT_METHOD WHERE ID = #{id}";
-    final String findByCode = "SELECT * FROM payment_method where payment_type = #{payment_type}";
+    final String getAll = "select * from payment_method";
+    final String getById = "select * from payment_method where id = #{id}";
+    final String findByCode = "select * from payment_method where payment_type = #{payment_type}";
 
     @Select(getById)
     @Results(value = {
-            @Result(property = "id", column = "ID"),
-            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
-            @Result(property = "name", column = "NAME")
+            @Result(property = "id", column = "id"),
+            @Result(property = "payment_type", column = "payment_type"),
+            @Result(property = "name", column = "name")
     })
     PaymentMethod getById(int id);
 
     @Select(getAll)
     @Results(value = {
-            @Result(property = "id", column = "ID"),
-            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
-            @Result(property = "name", column = "NAME")
+            @Result(property = "id", column = "id"),
+            @Result(property = "payment_type", column = "payment_type"),
+            @Result(property = "name", column = "name")
     })
     ArrayList<PaymentMethod> getAll();
 
