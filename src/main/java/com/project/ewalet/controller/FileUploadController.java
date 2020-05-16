@@ -9,6 +9,7 @@ import com.project.ewalet.model.TopUpHistory;
 import com.project.ewalet.model.User;
 import com.project.ewalet.model.UserBalance;
 import com.project.ewalet.service.FileStorageService;
+import com.project.ewalet.utils.Utility;
 import com.project.ewalet.utils.Validation;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
@@ -46,6 +47,8 @@ public class FileUploadController {
     private Validation validation;
     @Autowired
     UserBalanceMapper userBalanceMapper;
+    @Autowired
+    private Utility utility;
 
     @PostMapping("/upload-transfer-receipt/{token}")
     public ResponseEntity<?> uploadFile(@RequestParam("transfer_receipt") MultipartFile file, @PathVariable String token,
@@ -131,9 +134,7 @@ public class FileUploadController {
                 userBalanceMapper.updateUserBalance(currentBalance, userBalance.getUser_id());
                 balance = currentBalance;
             }
-            topUpHistory.setFile_upload_id(fileId);
-            topUpHistory.setStatus(1);
-            topUpHistoryMapper.update(topUpHistory);
+            topUpHistoryMapper.updateTopUpHistory(topUpHistory.getId(), 1, fileId);
         }
         return balance;
     }

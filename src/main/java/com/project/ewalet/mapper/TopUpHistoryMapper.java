@@ -16,7 +16,8 @@ public interface TopUpHistoryMapper {
             "VALUES (#{user_id}, #{topup_balance}, #{token}, #{payment_method}, #{status}, #{created_at}, #{file_upload_id})";
     final String update = "UPDATE topup_history SET created_at = #{created_at}, payment_method= #{payment_method}," +
             "status = #{status}, token =#{token}, topup_balance = #{topup_balance}, user_id = #{user_id}," +
-            "file_upload_id = #{file_upload_id} WHERE user_id = #{user_id}";
+            "file_upload_id = #{file_upload_id} WHERE id = #{id}";
+    final String updateTopUpHistory = "UPDATE topup_history SET status = #{status}, file_upload_id = #{file_upload_id} WHERE id = #{id}";
     final String updateStatus = "UPDATE topup_history SET status = #{status} WHERE user_id = #{user_id}";
     final String updateStatusById = "UPDATE TOPUP_HISTORY SET STATUS = #{status} WHERE ID = #{id}";
     final String getLatestRecord = "SELECT * from topup_history where user_id = #{user_id} and token = #{token}" +
@@ -24,10 +25,14 @@ public interface TopUpHistoryMapper {
     final String getLastHistoryByToken = "SELECT * FROM TOPUP_HISTORY WHERE TOKEN = #{token} ORDER BY ID DESC LIMIT 1";
     final String getTopupHistoryByUserId = "SELECT * FROM TOPUP_HISTORY WHERE USER_ID = #{userId}";
     final String getTopupHistoryById = "SELECT * FROM TOPUP_HISTORY WHERE ID = #{id}";
-    final String getTopupHistoryBanksByUserId = "SELECT T.*, F.PATH, F.FILE_NAME, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS T JOIN FILES AS F" +
-            " ON T.FILE_UPLOAD_ID = F.ID JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id}";
-    final String getTopupHistoryBanksWithoutFileByUserId = "SELECT T.*, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS T JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id} AND P.PAYMENT_TYPE = 1 AND T.FILE_UPLOAD_ID = 0";
-    final String getTopupHistoryMerchantsByUserId = "SELECT T.*, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS T JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id} AND P.PAYMENT_TYPE = 2";
+    final String getTopupHistoryBanksByUserId = "SELECT T.*, F.PATH, F.FILE_NAME, P.PAYMENT_TYPE, P.NAME FROM TOPUP_" +
+            "HISTORY AS T JOIN FILES AS F ON T.FILE_UPLOAD_ID = F.ID JOIN PAYMENT_METHOD AS P ON " +
+            "T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id}";
+    final String getTopupHistoryBanksWithoutFileByUserId = "SELECT T.*, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY " +
+            "AS T JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id} AND " +
+            "P.PAYMENT_TYPE = 1 AND T.FILE_UPLOAD_ID = 0";
+    final String getTopupHistoryMerchantsByUserId = "SELECT T.*, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS " +
+            "T JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id} AND P.PAYMENT_TYPE = 2";
 
     @Select(getTopupHistoryMerchantsByUserId)
     @Results(value = {
@@ -75,8 +80,8 @@ public interface TopUpHistoryMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(TopUpHistory topUpHistory);
 
-    @Update(update)
-    void update(TopUpHistory topUpHistory);
+    @Update(updateTopUpHistory)
+    void updateTopUpHistory(long id, int status, int file_upload_id);
 
     @Update(updateStatus)
     void updateStatus(int status, long user_id);
