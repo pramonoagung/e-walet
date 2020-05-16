@@ -72,12 +72,13 @@ public interface TopUpHistoryMapper {
     @Select(getTopupHistoryById)
     @Results(value = {
             @Result(property = "id", column = "ID"),
-            @Result(property = "payment_method", column = "PAYMENT_METHOD"),
-            @Result(property = "status", column = "STATUS"),
-            @Result(property = "token", column = "TOKEN"),
-            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
-            @Result(property = "user_id", column = "USER_ID"),
-            @Result(property = "created_at", column = "CREATED_AT")
+            @Result(property = "payment_method", column = "payment_method"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "token", column = "token"),
+            @Result(property = "topup_balance", column = "topup_balance"),
+            @Result(property = "user_id", column = "user_id"),
+            @Result(property = "created_at", column = "created_at"),
+            @Result(property = "file_upload_id", column = "file_upload_id")
     })
     TopUpHistory getTopUpHistoryById(long id);
 
@@ -89,7 +90,8 @@ public interface TopUpHistoryMapper {
             @Result(property = "token", column = "token"),
             @Result(property = "topup_balance", column = "topup_balance"),
             @Result(property = "user_id", column = "user_id"),
-            @Result(property = "created_at", column = "created_at")
+            @Result(property = "created_at", column = "created_at"),
+            @Result(property = "file_upload_id", column = "file_upload_id")
     })
     ArrayList<TopUpHistory> getTopUpHistoryByUserId(long user_id);
 
