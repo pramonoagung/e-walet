@@ -9,17 +9,17 @@ import java.util.ArrayList;
 @Repository
 @Mapper
 public interface OtpMapper {
-    final String findByCode = "SELECT * FROM otp WHERE code = #{code}";
-    final String getAllActiveOtp = "SELECT * FROM otp where status = 1";
-    final String insert = "INSERT INTO otp (id, user_id, code, STATUS, CREATED_AT ) " +
-            "VALUES (#{id}, #{user_id}, #{code}, #{status}, #{created_at})";
-    final String update = "UPDATE otp SET status = #{status} WHERE id = #{id} and user_id = #{user_id}";
+    final String findByCode = "select * from otp where code = #{code}";
+    final String getAllActiveOtp = "select * from otp where status = 1";
+    final String insert = "insert into otp (id, user_id, code, status, created_at ) " +
+            "values (#{id}, #{user_id}, #{code}, #{status}, #{created_at})";
+    final String update = "update otp set status = #{status} where id = #{id} and user_id = #{user_id}";
 
     @Select(getAllActiveOtp)
     @Results(value = {
-            @Result(property = "id", column = "ID"),
+            @Result(property = "id", column = "id"),
             @Result(property = "user_id", column = "user_id"),
-            @Result(property = "code", column = "CODE"),
+            @Result(property = "code", column = "code"),
             @Result(property = "status", column = "status"),
             @Result(property = "created_at", column = "created_at")
     })
@@ -31,7 +31,7 @@ public interface OtpMapper {
             @Result(property = "user_id", column = "user_id"),
             @Result(property = "code", column = "code"),
             @Result(property = "status", column = "status"),
-            @Result(property = "created_at", column = "CREATED_AT")
+            @Result(property = "created_at", column = "created_at")
     })
     Otp findByCode(String code);
 
