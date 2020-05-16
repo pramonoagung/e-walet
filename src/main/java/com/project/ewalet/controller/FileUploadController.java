@@ -48,7 +48,7 @@ public class FileUploadController {
             jsonObject.put("status", 404);
             jsonObject.put("message", "File didn't exist");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        } if (file.getSize() < 2097152) {
+        } if (file.getSize() > 2097152) {
             jsonObject.put("status", 406);
             jsonObject.put("message", "Max file size is 2 MB");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
