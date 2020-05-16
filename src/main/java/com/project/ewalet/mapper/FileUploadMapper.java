@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface FileUploadMapper {
     final String insert = "insert into files (id, user_id, file_type, path, file_name) values(#{id}, #{user_id}, #{file_type}, " +
             "#{path}, #{file_name})";
-    final String findById = "SELECT * FROM files WHERE id = #{id}";
-    final String findByPath = "SELECT * FROM files WHERE path = #{path}";
+    final String findById = "select * form files where id = #{id}";
+    final String findByPath = "select * form files where path = #{path}";
 
     @Insert(insert)
     @Options(useGeneratedKeys = true, keyProperty = "id")
