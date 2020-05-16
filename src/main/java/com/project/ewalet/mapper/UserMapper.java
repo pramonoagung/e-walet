@@ -24,7 +24,7 @@ public interface UserMapper {
     final String findByPhoneNumber = "select * from user where phone_number = #{phone_number}";
     final String findByEmail = "select * from user where email = #{email}";
     final String findByEmailAndPhone = "select * from user where email = #{email} and phone_number = #{phone_number}";
-    final String save = "insert into user (email, password, FIRST_name, LAST_name, phone_number, status, created_at ) " +
+    final String save = "insert into user (email, password, first_name, last_name, phone_number, status, created_at ) " +
             "values (#{email}, #{password}, #{first_name}, #{last_name}, #{phone_number}, #{status}, #{created_at})";
     final String updateToken = "update user set token = #{token} where id = #{id}";
 
@@ -46,8 +46,8 @@ public interface UserMapper {
             @Result(property = "id", column = "id"),
             @Result(property = "email", column = "email"),
             @Result(property = "password", column = "password"),
-            @Result(property = "first_name", column = "FIRST_name"),
-            @Result(property = "last_name", column = "LAST_name"),
+            @Result(property = "first_name", column = "first_name"),
+            @Result(property = "last_name", column = "last_name"),
             @Result(property = "phone_number", column = "phone_number"),
             @Result(property = "token", column = "token"),
             @Result(property = "status", column = "status"),
@@ -60,8 +60,8 @@ public interface UserMapper {
             @Result(property = "id", column = "id"),
             @Result(property = "email", column = "email"),
             @Result(property = "password", column = "password"),
-            @Result(property = "first_name", column = "FIRST_name"),
-            @Result(property = "last_name", column = "LAST_name"),
+            @Result(property = "first_name", column = "first_name"),
+            @Result(property = "last_name", column = "last_name"),
             @Result(property = "phone_number", column = "phone_number"),
             @Result(property = "token", column = "token"),
             @Result(property = "status", column = "status"),
