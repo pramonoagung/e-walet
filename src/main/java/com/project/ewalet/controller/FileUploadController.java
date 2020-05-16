@@ -51,7 +51,7 @@ public class FileUploadController {
                                         Authentication authentication) {
         JSONObject jsonObject = new JSONObject();
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
-        if (validation.validateToken(token)) {
+        if (!validation.validateToken(token)) {
             jsonObject.put("status", 406);
             jsonObject.put("message", "token format is wrong");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
