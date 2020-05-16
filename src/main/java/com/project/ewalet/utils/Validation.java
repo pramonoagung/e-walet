@@ -15,6 +15,7 @@ public class Validation {
     private final String EMAIL_REGEX = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";
     private final String NAME_REGEX = "(?i)(^[a-z])((?![ .,'-]$)[a-z .,'-]){0,24}$";
     static final long ONE_MINUTE_IN_MILLIS = 60000;//millisecs
+    private final String TOKEN_REGEX = "^[\\s\\S]{0,3}";
 
     public boolean name(String name) {
         return Pattern.matches(NAME_REGEX, name);
@@ -26,6 +27,10 @@ public class Validation {
         } else {
             return false;
         }
+    }
+
+    public boolean validateToken(String token) {
+        return Pattern.matches(TOKEN_REGEX, token);
     }
 
     public boolean phoneNumber(String phoneNumber) {
