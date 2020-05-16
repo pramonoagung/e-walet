@@ -40,7 +40,7 @@ public class TopUpHistoryController {
         topUpHistoryPayloadList.addAll(userTopUpHistoryMerchant);
         topUpHistoryPayloadList.addAll(userTopUpHistoryWithoutFileBanks);
         System.out.println(userTopUpHistoryWithoutFileBanks);
-        if (topUpHistoryPayloadList != null) {
+        if (!topUpHistoryPayloadList.isEmpty()) {
             jsonResponse.put("status", 200);
             jsonResponse.put("data", topUpHistoryPayloadList);
             jsonResponse.put("message", "Success");
