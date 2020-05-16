@@ -55,13 +55,15 @@ public class FileUploadController {
             jsonObject.put("status", 406);
             jsonObject.put("message", "token format is wrong");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
-        }
-        if (file.isEmpty()) {
+        } else if (!isTokenExist(token)) {
+            jsonObject.put("status", 404);
+            jsonObject.put("message", "token not found");
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
+        } else if (file.isEmpty()) {
             jsonObject.put("status", 404);
             jsonObject.put("message", "File didn't exist");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        }
-        if (file.getSize() > 2097152) {
+        } else if (file.getSize() > 2097152) {
             jsonObject.put("status", 406);
             jsonObject.put("message", "Max file size is 2 MB");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
@@ -92,7 +94,7 @@ public class FileUploadController {
             // save to db
             fileUploadMapper.save(fileUpload);
             int fileId = fileUpload.getId();
-            
+
             jsonObject.put("status", 201);
             jsonObject.put("message", "File Uploaded sucessfully");
             long balance = updateTopUp(userProfile.getId(), token, fileId);
@@ -101,6 +103,15 @@ public class FileUploadController {
 //        return new UploadFileResponse(fileName, fileDownloadUri,
 //                file.getContentType(), file.getSize());
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+    }
+
+    private boolean isTokenExist(String token) {
+        TopUpHistory topUpHistory = topUpHistoryMapper.getLastHistoryByToken(token);
+        if (topUpHistory == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private long updateTopUp(long user_id, String token, int fileId) {
