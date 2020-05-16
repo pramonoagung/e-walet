@@ -1,5 +1,6 @@
 package com.project.ewalet.controller;
 
+import com.project.ewalet.mapper.PaymentMethodMapper;
 import com.project.ewalet.mapper.TopUpHistoryMapper;
 import com.project.ewalet.mapper.UserBalanceMapper;
 import com.project.ewalet.mapper.UserMapper;
@@ -22,11 +23,15 @@ public class MerchantPaymentController {
     @Autowired
     UserBalanceMapper userBalanceMapper;
 
+    @Autowired
+    PaymentMethodMapper paymentMethodMapper;
+
     @GetMapping(value = "confirm-merchant-topup/{token}/{invoice_id}")
     public ResponseEntity confirmMerchantTopUp(@PathVariable String token, @PathVariable long invoice_id) {
         TopUpHistory topUpHistory = topUpHistoryMapper.getTopUpHistoryById(invoice_id);
         JSONObject jsonResponse = new JSONObject();
-        if (topUpHistory.getStatus() == 0 && topUpHistory.getToken().equals(token)) {
+        if (topUpHistory.getStatus() == 0 && topUpHistory.getToken().equals(token)
+                && paymentMethodMapper.getById(topUpHistory.getPayment_method()).getPayment_type() == 2) {
             if (topUpHistory != null) {
                 topUpHistoryMapper.updateStatusById(1, topUpHistory.getId());
                 UserBalance userBalance = userBalanceMapper.findByUserId(topUpHistory.getUser_id());
