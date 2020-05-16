@@ -14,11 +14,12 @@ public interface UserMapper {
     final String getById = "select * from user where id = #{id}";
     final String getByName = "select * from user where name = #{name}";
     final String deleteById = "delete from user where id = #{id}";
+
     final String update = "update user set email = #{email}, password = #{password}, first_name = #{first_name}, " +
             "last_name = #{last_name}, status = #{status}, phone_number = #{phone_number} where id = #{id}";
 
     final String login = "update user set login_status = true where id = #{id}";
-    final String logout = "update user set login_status = false where id = #{id}";
+    final String logout ="update user set login_status = false where id = #{id}";
     final String auth = "select * from user where email = #{email} and password = #{password}";
 
     final String findByPhoneNumber = "select * from user where phone_number = #{phone_number}";
@@ -49,7 +50,7 @@ public interface UserMapper {
             @Result(property = "first_name", column = "first_name"),
             @Result(property = "last_name", column = "last_name"),
             @Result(property = "phone_number", column = "phone_number"),
-            @Result(property = "token", column = "token"),
+            @Result(property = "token", column = "TOKEN"),
             @Result(property = "status", column = "status"),
             @Result(property = "created_at", column = "created_at")
     })
