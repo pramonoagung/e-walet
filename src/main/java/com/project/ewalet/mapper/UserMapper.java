@@ -10,25 +10,25 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    final String getAll = "SELECT * FROM USER";
-    final String getById = "SELECT * FROM USER WHERE ID = #{ID}";
-    final String getByName = "SELECT * FROM USER WHERE NAME = #{name}";
-    final String deleteById = "DELETE from USER WHERE ID = #{id}";
-    final String insert = "INSERT INTO USER (NAME, BRANCH, PERCENTAGE, PHONE, EMAIL ) VALUES (#{name}, #{branch}, #{percentage}, #{phone}, #{email})";
+    final String getAll = "SELECT * FROM user";
+    final String getById = "SELECT * FROM user WHERE ID = #{ID}";
+    final String getByName = "SELECT * FROM user WHERE NAME = #{name}";
+    final String deleteById = "DELETE from user WHERE ID = #{id}";
+    final String insert = "INSERT INTO user (NAME, BRANCH, PERCENTAGE, PHONE, EMAIL ) VALUES (#{name}, #{branch}, #{percentage}, #{phone}, #{email})";
 
-    final String update = "UPDATE USER SET EMAIL = #{email}, password = #{password}, first_NAME = #{first_name}, " +
+    final String update = "UPDATE user SET EMAIL = #{email}, password = #{password}, first_NAME = #{first_name}, " +
             "last_name = #{last_name}, status = #{status}, PHONE_number = #{phone_number} WHERE ID = #{id}";
 
-    final String login = "UPDATE USER SET LOGIN_STATUS = TRUE WHERE ID = #{id}";
-    final String logout = "UPDATE USER SET LOGIN_STATUS = FALSE WHERE ID = #{id}";
-    final String auth = "SELECT * FROM USER WHERE EMAIL = #{email} AND PASSWORD = #{password}";
+    final String login = "UPDATE user SET LOGIN_STATUS = TRUE WHERE ID = #{id}";
+    final String logout = "UPDATE user SET LOGIN_STATUS = FALSE WHERE ID = #{id}";
+    final String auth = "SELECT * FROM user WHERE EMAIL = #{email} AND PASSWORD = #{password}";
 
-    final String findByPhoneNumber = "SELECT * FROM USER WHERE PHONE_NUMBER = #{phone_number}";
-    final String findByEmail = "SELECT * FROM USER WHERE EMAIL = #{email}";
-    final String findByEmailAndPhone = "SELECT * FROM USER WHERE EMAIL = #{email} and phone_number = #{phone_number}";
-    final String save = "INSERT INTO USER (EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER, STATUS, CREATED_AT ) " +
+    final String findByPhoneNumber = "SELECT * FROM user WHERE PHONE_NUMBER = #{phone_number}";
+    final String findByEmail = "SELECT * FROM user WHERE EMAIL = #{email}";
+    final String findByEmailAndPhone = "SELECT * FROM user WHERE EMAIL = #{email} and phone_number = #{phone_number}";
+    final String save = "INSERT INTO user (EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER, STATUS, CREATED_AT ) " +
             "VALUES (#{email}, #{password}, #{first_name}, #{last_name}, #{phone_number}, #{status}, #{created_at})";
-    final String updateToken = "UPDATE USER SET TOKEN = #{token} WHERE ID = #{id}";
+    final String updateToken = "UPDATE user SET TOKEN = #{token} WHERE ID = #{id}";
 
     @Select(findByPhoneNumber)
     @Results(value = {
