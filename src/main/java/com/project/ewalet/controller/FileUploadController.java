@@ -11,6 +11,7 @@ import com.project.ewalet.model.UserBalance;
 import com.project.ewalet.service.FileStorageService;
 import com.project.ewalet.utils.Validation;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -48,8 +49,9 @@ public class FileUploadController {
 
     @PostMapping("/upload-transfer-receipt/{token}")
     public ResponseEntity<?> uploadFile(@RequestParam("transfer_receipt") MultipartFile file, @PathVariable String token,
-                                        Authentication authentication) {
+                                        Authentication authentication) throws FileSizeLimitExceededException {
         JSONObject jsonObject = new JSONObject();
+
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
         if (!validation.validateToken(token)) {
             jsonObject.put("status", 406);
@@ -100,8 +102,6 @@ public class FileUploadController {
             long balance = updateTopUp(userProfile.getId(), token, fileId);
             jsonObject.put("current_balance", balance);
         }
-//        return new UploadFileResponse(fileName, fileDownloadUri,
-//                file.getContentType(), file.getSize());
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
     }
 
