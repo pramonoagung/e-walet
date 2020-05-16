@@ -43,15 +43,17 @@ public class FileUploadController {
     public ResponseEntity<?> uploadFile(@RequestParam("transfer_receipt") MultipartFile file, @PathVariable String token,
                                         Authentication authentication) {
         JSONObject jsonObject = new JSONObject();
-        System.out.println("isi fileId " + authentication.getName());
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
         if (file.isEmpty()) {
             jsonObject.put("status", 404);
             jsonObject.put("message", "File didn't exist");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
+        } if (file.getSize() < 2097152) {
+            jsonObject.put("status", 406);
+            jsonObject.put("message", "Max file size is 2 MB");
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
         } else {
             String ext = FilenameUtils.getExtension(file.getOriginalFilename());
-
             int fileType = 0;
             if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg")) {
                 fileType = 1;
@@ -106,8 +108,7 @@ public class FileUploadController {
             } else {
                 long actualBalance = userBalance.getBalance();
                 long currentBalance = topUpHistory.getTopup_balance() + actualBalance;
-                userBalance.setBalance(currentBalance);
-                userBalanceMapper.insert(userBalance);
+                userBalanceMapper.updateUserBalance(currentBalance, userBalance.getUser_id());
                 balance = currentBalance;
             }
             topUpHistory.setFile_upload_id(fileId);
