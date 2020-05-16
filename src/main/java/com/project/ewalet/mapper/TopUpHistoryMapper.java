@@ -12,8 +12,8 @@ import java.util.List;
 @Mapper
 public interface TopUpHistoryMapper {
 
-    final String insert = "INSERT INTO topup_history (user_id, topup_balance, token, payment_method, status, created_at) " +
-            "VALUES (#{user_id}, #{topup_balance}, #{token}, #{payment_method}, #{status}, #{created_at})";
+    final String insert = "INSERT INTO topup_history (user_id, topup_balance, token, payment_method, status, created_at, FILE_UPLOAD_ID) " +
+            "VALUES (#{user_id}, #{topup_balance}, #{token}, #{payment_method}, #{status}, #{created_at}, #{file_upload_id})";
     final String update = "UPDATE topup_history SET created_at = #{created_at}, payment_method= #{payment_method}," +
             "status = #{status}, token =#{token}, topup_balance = #{topup_balance}, user_id = #{user_id}," +
             "file_upload_id = #{file_upload_id} WHERE user_id = #{user_id}";
@@ -26,6 +26,7 @@ public interface TopUpHistoryMapper {
     final String getTopupHistoryById = "SELECT * FROM TOPUP_HISTORY WHERE ID = #{id}";
     final String getTopupHistoryBanksByUserId = "SELECT T.*, F.PATH, F.FILE_NAME, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS T JOIN FILES AS F" +
             " ON T.FILE_UPLOAD_ID = F.ID JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id}";
+    final String getTopupHistoryBanksWithoutFileByUserId = "SELECT T.*, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS T JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id} AND P.PAYMENT_TYPE = 1 AND T.FILE_UPLOAD_ID = 0";
     final String getTopupHistoryMerchantsByUserId = "SELECT T.*, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS T JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id} AND P.PAYMENT_TYPE = 2";
 
     @Select(getTopupHistoryMerchantsByUserId)
@@ -41,6 +42,20 @@ public interface TopUpHistoryMapper {
             @Result(property = "created_at", column = "CREATED_AT")
     })
     List<TopUpHistoryPayload> getTopupHistoryMerchantsByUserId(long user_id);
+
+    @Select(getTopupHistoryBanksWithoutFileByUserId)
+    @Results(value = {
+            @Result(property = "id", column = "ID"),
+            @Result(property = "user_id", column = "USER_ID"),
+            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
+            @Result(property = "token", column = "TOKEN"),
+            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
+            @Result(property = "name", column = "NAME"),
+            @Result(property = "status", column = "STATUS"),
+            @Result(property = "path", column = "PATH"),
+            @Result(property = "created_at", column = "CREATED_AT")
+    })
+    List<TopUpHistoryPayload> getTopupHistoryBanksWithoutFileByUserId(long user_id);
 
     @Select(getTopupHistoryBanksByUserId)
     @Results(value = {
