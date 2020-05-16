@@ -21,11 +21,17 @@ public class Validation {
     }
 
     public boolean email(String email) {
-        return Pattern.matches(EMAIL_REGEX, email);
+        if (email != null) {
+            return Pattern.matches(EMAIL_REGEX, email);
+        } else {
+            return false;
+        }
     }
 
     public boolean phoneNumber(String phoneNumber) {
-        if (phoneNumber.charAt(0) != '0') {
+        if (phoneNumber == null) {
+            return false;
+        } else if (phoneNumber.charAt(0) != '0') {
             if (phoneNumber.length() >= 10 && phoneNumber.length() <= 13) {
                 return true;
             } else {
