@@ -31,6 +31,7 @@ public class Validation {
     public boolean validateToken(String token) {
         if (token.charAt(0) == '8' && token.charAt(1) == '0' && token.charAt(2) == '0' && token.charAt(3) == '0' &&
                 token.charAt(4) == '6' && token.charAt(5) == '2') {
+            System.out.println(token);
             return true;
         } else {
             return false;
