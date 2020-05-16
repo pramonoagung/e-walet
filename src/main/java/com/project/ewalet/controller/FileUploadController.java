@@ -51,7 +51,7 @@ public class FileUploadController {
                                         Authentication authentication) {
         JSONObject jsonObject = new JSONObject();
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
-        if(validation.validateToken(token)){
+        if (validation.validateToken(token)) {
             jsonObject.put("status", 406);
             jsonObject.put("message", "token format is wrong");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
@@ -60,7 +60,8 @@ public class FileUploadController {
             jsonObject.put("status", 404);
             jsonObject.put("message", "File didn't exist");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        } if (file.getSize() > 2097152) {
+        }
+        if (file.getSize() > 2097152) {
             jsonObject.put("status", 406);
             jsonObject.put("message", "Max file size is 2 MB");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
@@ -89,8 +90,9 @@ public class FileUploadController {
             fileUpload.setPath(fileDownloadUri);
             fileUpload.setFile_name(fileName);
             // save to db
-            int fileId = fileUploadMapper.save(fileUpload);
-
+            fileUploadMapper.save(fileUpload);
+            int fileId = fileUpload.getId();
+            
             jsonObject.put("status", 201);
             jsonObject.put("message", "File Uploaded sucessfully");
             long balance = updateTopUp(userProfile.getId(), token, fileId);
