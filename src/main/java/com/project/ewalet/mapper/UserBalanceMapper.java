@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface UserBalanceMapper {
-    final String insert = "INSERT INTO user_balance (user_id, balance) VALUES (#{user_id}, #{balance})";
-    final String findByUserId = "SELECT * FROM user_balance where user_id = #{user_id}";
-    final String updateBalance = "UPDATE user_balance SET balance = #{balance} WHERE user_id = #{user_id}";
+    final String insert = "insert into user_balance (user_id, balance) values (#{user_id}, #{balance})";
+    final String findByUserId = "select * from user_balance where user_id = #{user_id}";
+    final String updateBalance = "update user_balance set balance = #{balance} where user_id = #{user_id}";
 
     @Select(findByUserId)
     @Results(value = {
