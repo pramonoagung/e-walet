@@ -9,6 +9,7 @@ import com.project.ewalet.model.TopUpHistory;
 import com.project.ewalet.model.User;
 import com.project.ewalet.model.UserBalance;
 import com.project.ewalet.service.FileStorageService;
+import com.project.ewalet.utils.Validation;
 import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,23 @@ public class FileUploadController {
     private FileUploadMapper fileUploadMapper;
     @Autowired
     private FileStorageService fileStorageService;
-
+    @Autowired
+    private TopUpHistoryMapper topUpHistoryMapper;
+    @Autowired
+    private Validation validation;
+    @Autowired
+    UserBalanceMapper userBalanceMapper;
+    
     @PostMapping("/upload-transfer-receipt/{token}")
     public ResponseEntity<?> uploadFile(@RequestParam("transfer_receipt") MultipartFile file, @PathVariable String token,
                                         Authentication authentication) {
         JSONObject jsonObject = new JSONObject();
         User userProfile = userMapper.findByPhoneNumber(authentication.getName());
+        if(validation.validateToken(token)){
+            jsonObject.put("status", 406);
+            jsonObject.put("message", "token format is wrong");
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
+        }
         if (file.isEmpty()) {
             jsonObject.put("status", 404);
             jsonObject.put("message", "File didn't exist");
@@ -88,11 +100,6 @@ public class FileUploadController {
 //                file.getContentType(), file.getSize());
         return new ResponseEntity<>(jsonObject, HttpStatus.OK);
     }
-
-    @Autowired
-    private TopUpHistoryMapper topUpHistoryMapper;
-    @Autowired
-    UserBalanceMapper userBalanceMapper;
 
     private long updateTopUp(long user_id, String token, int fileId) {
         long balance = 0;
