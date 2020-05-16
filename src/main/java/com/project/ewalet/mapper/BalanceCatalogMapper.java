@@ -13,14 +13,14 @@ import java.util.ArrayList;
 @Mapper
 public interface BalanceCatalogMapper {
 
-    final String getAll = "SELECT * FROM BALANCE_CATALOG";
-    final String findByCode = "SELECT * FROM BALANCE_CATALOG where code = #{code}";
+    final String getAll = "select * from balance_catalog";
+    final String findByCode = "select * from balance_catalog where code = #{code}";
 
     @Select(getAll)
     @Results(value = {
-            @Result(property = "id", column = "ID"),
-            @Result(property = "code", column = "CODE"),
-            @Result(property = "balance", column = "BALANCE")
+            @Result(property = "id", column = "id"),
+            @Result(property = "code", column = "code"),
+            @Result(property = "balance", column = "balance")
     })
     ArrayList<BalanceCatalog> getAll();
 
