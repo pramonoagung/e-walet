@@ -38,7 +38,12 @@ public class OtpController {
     @PostMapping("/resend-otp")
     public ResponseEntity<?> resendOtp(@RequestBody ResendOtpRequest resendOtpRequest) {
         JSONObject jsonObject = new JSONObject();
-        if (validation.email(resendOtpRequest.getEmail()) && validation.phoneNumber(resendOtpRequest.getPhone_number())) {
+        if (userMapper.findByPhoneNumber(resendOtpRequest.getPhone_number()).getStatus() == 1) {
+            jsonObject.put("status", 406);
+            jsonObject.put("message", "Your account has been verified");
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
+        }
+        else if (validation.email(resendOtpRequest.getEmail()) && validation.phoneNumber(resendOtpRequest.getPhone_number())) {
             String otpCode = utility.otpCode();
             User user = userMapper.findByEmail(resendOtpRequest.getEmail());
             Otp otp = new Otp();
