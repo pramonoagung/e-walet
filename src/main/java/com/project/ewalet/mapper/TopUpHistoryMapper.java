@@ -37,42 +37,42 @@ public interface TopUpHistoryMapper {
     @Select(getTopupHistoryMerchantsByUserId)
     @Results(value = {
             @Result(property = "id", column = "id"),
-            @Result(property = "user_id", column = "USER_id"),
-            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
-            @Result(property = "token", column = "TOKEN"),
-            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
-            @Result(property = "name", column = "NAME"),
-            @Result(property = "status", column = "STATUS"),
-            @Result(property = "path", column = "PATH"),
-            @Result(property = "created_at", column = "CREATED_AT")
+            @Result(property = "user_id", column = "user_id"),
+            @Result(property = "topup_balance", column = "toup_balance"),
+            @Result(property = "token", column = "toke"),
+            @Result(property = "payment_type", column = "payment_type"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "path", column = "path"),
+            @Result(property = "created_at", column = "create_at")
     })
     List<TopUpHistoryPayload> getTopupHistoryMerchantsByUserId(long user_id);
 
     @Select(getTopupHistoryBanksWithoutFileByUserId)
     @Results(value = {
             @Result(property = "id", column = "id"),
-            @Result(property = "user_id", column = "USER_id"),
-            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
-            @Result(property = "token", column = "TOKEN"),
-            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
-            @Result(property = "name", column = "NAME"),
-            @Result(property = "status", column = "STATUS"),
-            @Result(property = "path", column = "PATH"),
-            @Result(property = "created_at", column = "CREATED_AT")
+            @Result(property = "user_id", column = "user_id"),
+            @Result(property = "topup_balance", column = "toup_balance"),
+            @Result(property = "token", column = "toke"),
+            @Result(property = "payment_type", column = "payment_type"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "path", column = "path"),
+            @Result(property = "created_at", column = "create_at")
     })
     List<TopUpHistoryPayload> getTopupHistoryBanksWithoutFileByUserId(long user_id);
 
     @Select(getTopupHistoryBanksByUserId)
     @Results(value = {
             @Result(property = "id", column = "id"),
-            @Result(property = "user_id", column = "USER_id"),
-            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
-            @Result(property = "token", column = "TOKEN"),
-            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
-            @Result(property = "name", column = "NAME"),
-            @Result(property = "status", column = "STATUS"),
-            @Result(property = "path", column = "PATH"),
-            @Result(property = "created_at", column = "CREATED_AT")
+            @Result(property = "user_id", column = "user_id"),
+            @Result(property = "topup_balance", column = "toup_balance"),
+            @Result(property = "token", column = "toke"),
+            @Result(property = "payment_type", column = "payment_type"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "path", column = "path"),
+            @Result(property = "created_at", column = "create_at")
     })
     List<TopUpHistoryPayload> getTopupHistoryBanksByUserId(long user_id);
 
