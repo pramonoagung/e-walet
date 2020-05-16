@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.DecimalFormat;
-import java.util.Random;
-
 @RestController
 @CrossOrigin
 public class OtpController {
@@ -42,10 +39,14 @@ public class OtpController {
             jsonObject.put("status", 406);
             jsonObject.put("message", "Your account has been verified");
             return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
-        }
-        else if (validation.email(resendOtpRequest.getEmail()) && validation.phoneNumber(resendOtpRequest.getPhone_number())) {
+        } else if (validation.email(resendOtpRequest.getEmail()) && validation.phoneNumber(resendOtpRequest.getPhone_number())) {
             String otpCode = utility.otpCode();
-            User user = userMapper.findByEmail(resendOtpRequest.getEmail());
+            User user = userMapper.findByEmailAndPhone(resendOtpRequest.getEmail(), resendOtpRequest.getPhone_number());
+            if (user == null) {
+                jsonObject.put("status", 406);
+                jsonObject.put("message", "Either phone number or email is wrong");
+                return new ResponseEntity<>(jsonObject, HttpStatus.NOT_ACCEPTABLE);
+            }
             Otp otp = new Otp();
             otp.setUser_id(user.getId());
             otp.setCode(otpCode);
