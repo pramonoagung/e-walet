@@ -45,7 +45,7 @@ public class FileUploadController {
     private Validation validation;
     @Autowired
     UserBalanceMapper userBalanceMapper;
-    
+
     @PostMapping("/upload-transfer-receipt/{token}")
     public ResponseEntity<?> uploadFile(@RequestParam("transfer_receipt") MultipartFile file, @PathVariable String token,
                                         Authentication authentication) {
