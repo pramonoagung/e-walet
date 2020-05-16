@@ -33,11 +33,13 @@ public class TopUpHistoryController {
 
         User user = userMapper.findByPhoneNumber(authentication.getName());
         List<TopUpHistoryPayload> userTopUpHistoryBanks = topUpHistoryMapper.getTopupHistoryBanksByUserId(user.getId());
+        List<TopUpHistoryPayload> userTopUpHistoryWithoutFileBanks = topUpHistoryMapper.getTopupHistoryBanksWithoutFileByUserId(user.getId());
         List<TopUpHistoryPayload> userTopUpHistoryMerchant = topUpHistoryMapper.getTopupHistoryMerchantsByUserId(user.getId());
         List<TopUpHistoryPayload> topUpHistoryPayloadList = new ArrayList<>();
         topUpHistoryPayloadList.addAll(userTopUpHistoryBanks);
         topUpHistoryPayloadList.addAll(userTopUpHistoryMerchant);
-
+        topUpHistoryPayloadList.addAll(userTopUpHistoryWithoutFileBanks);
+        System.out.println(userTopUpHistoryWithoutFileBanks);
         if (topUpHistoryPayloadList != null) {
             jsonResponse.put("status", 200);
             jsonResponse.put("data", topUpHistoryPayloadList);

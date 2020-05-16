@@ -69,6 +69,7 @@ public class TopUpController {
             topUpHistory.setPayment_method(paymentMethod.getId());
             topUpHistory.setStatus(0);
             topUpHistory.setCreated_at(utility.getCurrentTime());
+            topUpHistory.setFile_upload_id(0);
             topUpHistoryMapper.insert(topUpHistory);
             System.out.println(topUpHistory.getId());
 
