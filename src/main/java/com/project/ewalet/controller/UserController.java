@@ -168,7 +168,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/verify-otp")
-    public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest otpRequest) throws ParseException {
+    public ResponseEntity<?> verifyOtp(@Valid @RequestBody OtpRequest otpRequest) throws ParseException {
         JSONObject jsonObject = new JSONObject();
         Otp otp = otpMapper.findByCode(otpRequest.getOtp_code());
         if (otp == null) {

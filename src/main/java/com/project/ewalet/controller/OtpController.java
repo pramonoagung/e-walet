@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @CrossOrigin
 public class OtpController {
@@ -33,7 +35,7 @@ public class OtpController {
     private UserMapper userMapper;
 
     @PostMapping("/resend-otp")
-    public ResponseEntity<?> resendOtp(@RequestBody ResendOtpRequest resendOtpRequest) {
+    public ResponseEntity<?> resendOtp(@Valid @RequestBody ResendOtpRequest resendOtpRequest) {
         JSONObject jsonObject = new JSONObject();
         if (userMapper.findByPhoneNumber(resendOtpRequest.getPhone_number()).getStatus() == 1) {
             jsonObject.put("status", 406);

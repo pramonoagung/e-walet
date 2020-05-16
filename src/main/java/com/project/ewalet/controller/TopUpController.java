@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -39,7 +40,7 @@ public class TopUpController {
     private Utility utility;
 
     @PostMapping("/topup-balance")
-    public ResponseEntity<?> topup(@RequestBody TopUpRequest topUpRequest) {
+    public ResponseEntity<?> topup(@Valid @RequestBody TopUpRequest topUpRequest) {
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
 
