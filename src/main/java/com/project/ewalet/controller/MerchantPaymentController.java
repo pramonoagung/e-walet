@@ -30,9 +30,9 @@ public class MerchantPaymentController {
     public ResponseEntity confirmMerchantTopUp(@PathVariable String token, @PathVariable long invoice_id) {
         TopUpHistory topUpHistory = topUpHistoryMapper.getTopUpHistoryById(invoice_id);
         JSONObject jsonResponse = new JSONObject();
-        if (topUpHistory.getStatus() == 0 && topUpHistory.getToken().equals(token)
+        if (topUpHistory != null && topUpHistory.getStatus() == 0 && topUpHistory.getToken().equals(token)
                 && paymentMethodMapper.getById(topUpHistory.getPayment_method()).getPayment_type() == 2) {
-            if (topUpHistory != null) {
+//            if (topUpHistory != null) {
                 topUpHistoryMapper.updateStatusById(1, topUpHistory.getId());
                 UserBalance userBalance = userBalanceMapper.findByUserId(topUpHistory.getUser_id());
                 if (userBalance != null) {
@@ -46,11 +46,11 @@ public class MerchantPaymentController {
                 jsonResponse.put("status", 200);
                 jsonResponse.put("message", "Success");
                 return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
-            } else {
-                jsonResponse.put("status", 406);
-                jsonResponse.put("message", "Invalid payment token");
-                return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_ACCEPTABLE);
-            }
+//            } else {
+//                jsonResponse.put("status", 406);
+//                jsonResponse.put("message", "Invalid payment token");
+//                return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_ACCEPTABLE);
+//            }
         }
         else {
             jsonResponse.put("status", 406);
