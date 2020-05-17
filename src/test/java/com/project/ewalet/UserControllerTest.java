@@ -43,9 +43,9 @@ public class UserControllerTest {
     }
 
     @Test
-    public void loginTest() {
+    public void loginVerifiedTest() {
         mockito.when(userMapper.findByPhoneNumber("6281373951739")).thenReturn(
-                userExpected()
+                user
         );
         Assert.assertEquals(userExpected(), userMapper.findByPhoneNumber("6281373951739"));
     }
