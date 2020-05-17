@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2020 at 03:07 PM
+-- Generation Time: May 17, 2020 at 08:19 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -54,9 +54,9 @@ INSERT INTO `balance_catalog` (`id`, `balance`, `code`) VALUES
 
 CREATE TABLE `files` (
   `id` int(11) NOT NULL,
-  `file_name` varchar(100) DEFAULT NULL,
+  `file_name` varchar(255) DEFAULT NULL,
   `file_type` int(11) DEFAULT NULL,
-  `path` varchar(100) DEFAULT NULL,
+  `path` varchar(255) DEFAULT NULL,
   `user_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -110,6 +110,7 @@ CREATE TABLE `topup_history` (
   `topup_balance` bigint(20) DEFAULT NULL,
   `user_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- --------------------------------------------------------
 
 --
@@ -119,13 +120,15 @@ CREATE TABLE `topup_history` (
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
-  `email` varchar(25) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
   `first_name` varchar(25) DEFAULT NULL,
   `last_name` varchar(25) DEFAULT NULL,
   `password` varchar(60) DEFAULT NULL,
   `phone_number` varchar(25) DEFAULT NULL,
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `user_balance`
@@ -136,7 +139,6 @@ CREATE TABLE `user_balance` (
   `balance` bigint(20) DEFAULT NULL,
   `user_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 --
 -- Indexes for dumped tables
@@ -204,19 +206,19 @@ ALTER TABLE `user_balance`
 -- AUTO_INCREMENT for table `balance_catalog`
 --
 ALTER TABLE `balance_catalog`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `files`
 --
 ALTER TABLE `files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `otp`
 --
 ALTER TABLE `otp`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `payment_method`
@@ -228,19 +230,19 @@ ALTER TABLE `payment_method`
 -- AUTO_INCREMENT for table `topup_history`
 --
 ALTER TABLE `topup_history`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user_balance`
 --
 ALTER TABLE `user_balance`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

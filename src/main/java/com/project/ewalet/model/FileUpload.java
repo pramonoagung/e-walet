@@ -15,8 +15,8 @@ public class FileUpload {
     private long user_id;
     @Column
     private int file_type;
-    @Column(length = 100)
+    @Column(length = 255)
     private String path;
-    @Column(length = 100)
+    @Column(length = 255)
     private String file_name;
 }

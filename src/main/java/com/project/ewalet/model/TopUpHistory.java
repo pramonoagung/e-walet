@@ -28,6 +28,6 @@ public class TopUpHistory {
     private int status;
     @Column
     private int file_upload_id;
-    @Column
+    @Column(length = 255)
     private String created_at;
 }
