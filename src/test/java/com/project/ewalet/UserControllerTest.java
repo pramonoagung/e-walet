@@ -49,4 +49,5 @@ public class UserControllerTest {
         );
         Assert.assertEquals(userExpected(), userMapper.findByPhoneNumber("6281373951739"));
     }
+
 }
