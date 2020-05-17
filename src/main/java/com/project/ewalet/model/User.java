@@ -3,7 +3,9 @@ package com.project.ewalet.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,7 +13,7 @@ import java.time.LocalDateTime;
 //@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @Entity
 @Table(name = "user", indexes = @Index(columnList = "id"))
-@Data
+@Data @NoArgsConstructor @AllArgsConstructor
 public class User {
 
     @Id
@@ -29,5 +31,5 @@ public class User {
     @Column(length = 25)
     private String phone_number;
     private int status;
-    private LocalDateTime created_at = LocalDateTime.now();
+    private String created_at = LocalDateTime.now().toString();
 }
