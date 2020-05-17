@@ -113,7 +113,7 @@ public interface TopUpHistoryMapper {
             @Result(property = "created_at", column = "created_at"),
             @Result(property = "file_upload_id", column = "file_upload_id")
     })
-    ArrayList<TopUpHistory> getTopUpHistoryByUserId(long user_id);
+    ArrayList<TopUpHistoryPayload> getTopUpHistoryByUserId(long user_id);
 
     @Select(getLatestRecord)
     @Results(value = {
