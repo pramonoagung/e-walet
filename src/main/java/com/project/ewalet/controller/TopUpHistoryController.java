@@ -30,19 +30,11 @@ public class TopUpHistoryController {
     @GetMapping(value = "get-topup-history")
     ResponseEntity<?> getTopupHistoryByUserPhoneNumber(Authentication authentication) {
         JSONObject jsonResponse = new JSONObject();
-
         User user = userMapper.findByPhoneNumber(authentication.getName());
-        List<TopUpHistoryPayload> userTopUpHistoryBanks = topUpHistoryMapper.getTopupHistoryBanksByUserId(user.getId());
-        List<TopUpHistoryPayload> userTopUpHistoryWithoutFileBanks = topUpHistoryMapper.getTopupHistoryBanksWithoutFileByUserId(user.getId());
-        List<TopUpHistoryPayload> userTopUpHistoryMerchant = topUpHistoryMapper.getTopupHistoryMerchantsByUserId(user.getId());
-        List<TopUpHistoryPayload> topUpHistoryPayloadList = new ArrayList<>();
-        topUpHistoryPayloadList.addAll(userTopUpHistoryBanks);
-        topUpHistoryPayloadList.addAll(userTopUpHistoryMerchant);
-        topUpHistoryPayloadList.addAll(userTopUpHistoryWithoutFileBanks);
-        System.out.println(userTopUpHistoryWithoutFileBanks);
-        if (!topUpHistoryPayloadList.isEmpty()) {
+        List<TopUpHistoryPayload> userTopUpHistoryList = topUpHistoryMapper.getTopUpHistoryByUserId(user.getId());
+        if (!userTopUpHistoryList.isEmpty()) {
             jsonResponse.put("status", 200);
-            jsonResponse.put("data", topUpHistoryPayloadList);
+            jsonResponse.put("data", userTopUpHistoryList);
             jsonResponse.put("message", "Success");
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         }

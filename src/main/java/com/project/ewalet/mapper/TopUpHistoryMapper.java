@@ -23,58 +23,9 @@ public interface TopUpHistoryMapper {
     final String getLatestRecord = "SELECT * from topup_history where user_id = #{user_id} and token = #{token}" +
             " and status = 0 and payment_method = 1 ORDER BY created_at DESC limit 1";
     final String getLastHistoryByToken = "SELECT * FROM TOPUP_HISTORY WHERE TOKEN = #{token} ORDER BY ID DESC LIMIT 1";
-    final String getTopupHistoryByUserId = "SELECT * FROM TOPUP_HISTORY WHERE USER_ID = #{userId}";
+    final String getTopupHistoryByUserId = "SELECT T.*, F.PATH, F.FILE_NAME, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS T " +
+            "JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID LEFT JOIN FILES AS F ON T.FILE_UPLOAD_ID = F.ID WHERE T.USER_ID = #{userId}";
     final String getTopupHistoryById = "SELECT * FROM TOPUP_HISTORY WHERE ID = #{id}";
-    final String getTopupHistoryBanksByUserId = "SELECT T.*, F.PATH, F.FILE_NAME, P.PAYMENT_TYPE, P.NAME FROM TOPUP_" +
-            "HISTORY AS T JOIN FILES AS F ON T.FILE_UPLOAD_ID = F.ID JOIN PAYMENT_METHOD AS P ON " +
-            "T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id}";
-    final String getTopupHistoryBanksWithoutFileByUserId = "SELECT T.*, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY " +
-            "AS T JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id} AND " +
-            "P.PAYMENT_TYPE = 1 AND T.FILE_UPLOAD_ID = 0";
-    final String getTopupHistoryMerchantsByUserId = "SELECT T.*, P.PAYMENT_TYPE, P.NAME FROM TOPUP_HISTORY AS " +
-            "T JOIN PAYMENT_METHOD AS P ON T.PAYMENT_METHOD = P.ID WHERE T.USER_ID = #{user_id} AND P.PAYMENT_TYPE = 2";
-
-    @Select(getTopupHistoryMerchantsByUserId)
-    @Results(value = {
-            @Result(property = "id", column = "ID"),
-            @Result(property = "user_id", column = "USER_ID"),
-            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
-            @Result(property = "token", column = "TOKEN"),
-            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
-            @Result(property = "name", column = "NAME"),
-            @Result(property = "status", column = "STATUS"),
-            @Result(property = "path", column = "PATH"),
-            @Result(property = "created_at", column = "CREATED_AT")
-    })
-    List<TopUpHistoryPayload> getTopupHistoryMerchantsByUserId(long user_id);
-
-    @Select(getTopupHistoryBanksWithoutFileByUserId)
-    @Results(value = {
-            @Result(property = "id", column = "ID"),
-            @Result(property = "user_id", column = "USER_ID"),
-            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
-            @Result(property = "token", column = "TOKEN"),
-            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
-            @Result(property = "name", column = "NAME"),
-            @Result(property = "status", column = "STATUS"),
-            @Result(property = "path", column = "PATH"),
-            @Result(property = "created_at", column = "CREATED_AT")
-    })
-    List<TopUpHistoryPayload> getTopupHistoryBanksWithoutFileByUserId(long user_id);
-
-    @Select(getTopupHistoryBanksByUserId)
-    @Results(value = {
-            @Result(property = "id", column = "ID"),
-            @Result(property = "user_id", column = "USER_ID"),
-            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
-            @Result(property = "token", column = "TOKEN"),
-            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
-            @Result(property = "name", column = "NAME"),
-            @Result(property = "status", column = "STATUS"),
-            @Result(property = "path", column = "PATH"),
-            @Result(property = "created_at", column = "CREATED_AT")
-    })
-    List<TopUpHistoryPayload> getTopupHistoryBanksByUserId(long user_id);
 
     @Insert(insert)
     @Options(useGeneratedKeys = true, keyProperty = "id")
@@ -105,15 +56,16 @@ public interface TopUpHistoryMapper {
     @Select(getTopupHistoryByUserId)
     @Results(value = {
             @Result(property = "id", column = "ID"),
-            @Result(property = "payment_method", column = "payment_method"),
-            @Result(property = "status", column = "status"),
-            @Result(property = "token", column = "token"),
-            @Result(property = "topup_balance", column = "topup_balance"),
-            @Result(property = "user_id", column = "user_id"),
-            @Result(property = "created_at", column = "created_at"),
-            @Result(property = "file_upload_id", column = "file_upload_id")
+            @Result(property = "user_id", column = "USER_ID"),
+            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
+            @Result(property = "token", column = "TOKEN"),
+            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
+            @Result(property = "name", column = "NAME"),
+            @Result(property = "status", column = "STATUS"),
+            @Result(property = "path", column = "PATH"),
+            @Result(property = "created_at", column = "CREATED_AT")
     })
-    ArrayList<TopUpHistory> getTopUpHistoryByUserId(long user_id);
+    ArrayList<TopUpHistoryPayload> getTopUpHistoryByUserId(long user_id);
 
     @Select(getLatestRecord)
     @Results(value = {
