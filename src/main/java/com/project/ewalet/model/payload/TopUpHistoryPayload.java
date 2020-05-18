@@ -9,7 +9,7 @@ public class TopUpHistoryPayload {
     private long user_id;
     private long topup_balance;
     private String token;
-    private int payment_method;
+    private int payment_type;
     private String name;
     private int status;
     private String path;

@@ -59,7 +59,7 @@ public interface TopUpHistoryMapper {
             @Result(property = "user_id", column = "user_id"),
             @Result(property = "topup_balance", column = "topup_balance"),
             @Result(property = "token", column = "token"),
-            @Result(property = "payment_method", column = "payment_method"),
+            @Result(property = "payment_type", column = "payment_type"),
             @Result(property = "name", column = "name"),
             @Result(property = "status", column = "status"),
             @Result(property = "path", column = "path"),
