@@ -55,21 +55,21 @@ public interface TopUpHistoryMapper {
 
     @Select(getTopupHistoryByUserId)
     @Results(value = {
-            @Result(property = "id", column = "ID"),
-            @Result(property = "user_id", column = "USER_ID"),
-            @Result(property = "topup_balance", column = "TOPUP_BALANCE"),
-            @Result(property = "token", column = "TOKEN"),
-            @Result(property = "payment_type", column = "PAYMENT_TYPE"),
-            @Result(property = "name", column = "NAME"),
-            @Result(property = "status", column = "STATUS"),
-            @Result(property = "path", column = "PATH"),
-            @Result(property = "created_at", column = "CREATED_AT")
+            @Result(property = "id", column = "id"),
+            @Result(property = "user_id", column = "user_id"),
+            @Result(property = "topup_balance", column = "topup_balance"),
+            @Result(property = "token", column = "token"),
+            @Result(property = "payment_type", column = "payment_type"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "path", column = "path"),
+            @Result(property = "created_at", column = "created_at")
     })
     ArrayList<TopUpHistoryPayload> getTopUpHistoryByUserId(long user_id);
 
     @Select(getLatestRecord)
     @Results(value = {
-            @Result(property = "id", column = "ID"),
+            @Result(property = "id", column = "id"),
             @Result(property = "payment_method", column = "payment_method"),
             @Result(property = "status", column = "status"),
             @Result(property = "token", column = "token"),

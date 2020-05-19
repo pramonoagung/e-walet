@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Collections;
 
-
 @SpringBootApplication
 public class BankApplication {
     public static void main(String[] args) {
@@ -14,4 +13,3 @@ public class BankApplication {
         app.run(args);
     }
 }
-
