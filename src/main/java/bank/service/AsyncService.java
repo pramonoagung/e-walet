@@ -25,7 +25,7 @@ public class AsyncService {
 
     @Async("asyncExecutor")
     public CompletableFuture<JSONObject> confirmPayment(String token) {
-        JSONObject response = restTemplate.getForObject("http://localhost:8080/confirm-bank/"+token, JSONObject.class);
+        JSONObject response = restTemplate.getForObject("http://336f1b2a.ngrok.io/confirm-bank/"+token, JSONObject.class);
         if (response != null) {
             return CompletableFuture.completedFuture(response);
         } else {
